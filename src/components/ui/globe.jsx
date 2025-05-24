@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import ThreeGlobe from "three-globe";
-import countries from "@/data/globe.json";
+import countries from '../../data/globe.json';
 
 function GlobeScene({ globeConfig, data }) {
   const globeRef = useRef();
@@ -52,13 +52,11 @@ function GlobeScene({ globeConfig, data }) {
 
 export function Globe({ globeConfig = {}, data = [] }) {
   return (
-    <div style={{ width: "100%", height: "500px" }}>
       <Canvas camera={{ position: [0, 0, 300], fov: 45 }}>
         <ambientLight />
         <pointLight position={[100, 100, 100]} />
         <OrbitControls />
         <GlobeScene globeConfig={globeConfig} data={data} />
       </Canvas>
-    </div>
   );
 }

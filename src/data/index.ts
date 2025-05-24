@@ -78,16 +78,16 @@ export const navItems = [
   img: "/p1.png",
   iconLists: ["/next.svg", "/tail.svg", "/ts.svg", "/mongo.svg", "/shadcn.png"],
   link: "https://inspire-craft-fyp.vercel.app/",
-}
+},
 
-    // {
-    //   id: 2,
-    //   title: "Yoom - Video Conferencing App",
-    //   des: "Simplify your video conferencing experience with Yoom. Seamlessly connect with colleagues and friends.",
-    //   img: "/p2.svg",
-    //   iconLists: ["/next.svg", "/tail.svg", "/ts.svg", "/stream.svg", "/c.svg"],
-    //   link: "https://github.com/adrianhajdin/zoom-clone",
-    // },
+    {
+      id: 2,
+      title: "Question Bank",
+      des: "Simplify your video conferencing experience with Yoom. Seamlessly connect with colleagues and friends.",
+      img: "/p2.png",
+      iconLists: ["/re.svg", "/tail.svg", "/three.svg", "/c.svg"],
+      link: "https://full-stack-question-bank-mern-stack.vercel.app/",
+    },
     // {
     //   id: 3,
     //   title: "AI Image SaaS - Canva Application",

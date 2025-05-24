@@ -1,10 +1,9 @@
-
 import { motion } from "framer-motion";
-import {Globe} from "./globe";
+import { Globe } from "./globe";
 
 export function GlobeDemo() {
   const globeConfig = {
-   pointSize: 4,
+    pointSize: 4,
     globeColor: "#062056",
     showAtmosphere: true,
     atmosphereColor: "#FFFFFF",
@@ -391,13 +390,13 @@ export function GlobeDemo() {
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="h-screen w-full"
-    >
-      <Globe config={globeConfig} arcsData={sampleArcs} />
-    </motion.div>
+    <div className="flex items-center justify-center absolute -left-5 top-36 md:top-40 w-full h-full">
+      <div className="max-w-7xl mx-auto w-full relative overflow-hidden  px-4 h-96">
+        <div className="absolute w-full bottom-0 inset-x-0 h-40 bg-gradient-to-b pointer-events-none select-none from-transparent dark:to-black to-white z-40" />
+        <div className="absolute w-full  h-72 md:h-full z-10">
+          <Globe config={globeConfig} arcsData={sampleArcs} />
+        </div>
+      </div>
+    </div>
   );
 }
