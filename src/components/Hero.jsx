@@ -33,7 +33,7 @@ const Hero = () => {
             duration ={1.5}
             filter={false}
             />
-            <p className="text-center md:tracking-wider mb-4 text-sm md:text-lg lg:text-2xl">
+            <p className="text-center md:tracking-wider mb-4 text-sm md:text-lg lg:text-2xl text-gray-300">
                 Hi, I&apos;m Junaid, a JavaScript Developer based in Lahore,Pakistan.
             </p>
         <a href="#projects">
