@@ -1,3 +1,5 @@
+"use client";
+
 const MagicButton = ({title,icon,position,handleClick,otherClasses}) => {
   return (
     <button className="relative inline-flex h-12 w-full rounded-lg overflow-hidden p-[1px] md:w-60 md:mt-10" onClick={handleClick}>
