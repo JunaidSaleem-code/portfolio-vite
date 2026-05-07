@@ -25,13 +25,22 @@ export default function ExperiencePage() {
       fields={FIELDS}
       defaultValues={DEFAULT_VALUES}
       renderSummary={(item) => (
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="flex min-w-0 items-center gap-3">
           {item.thumbnail && (
-            <img src={item.thumbnail} alt="" className="h-12 w-12 shrink-0 rounded object-cover" />
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={item.thumbnail}
+              alt=""
+              className="h-12 w-12 shrink-0 rounded-lg border border-[var(--st-line)] object-cover"
+            />
           )}
           <div className="min-w-0">
-            <p className="truncate font-medium text-white">{item.title}</p>
-            <p className="line-clamp-1 text-xs text-zinc-500">{item.description}</p>
+            <p className="truncate text-[14.5px] font-medium text-[var(--st-ink)]">
+              {item.title}
+            </p>
+            <p className="line-clamp-1 text-[12.5px] text-[var(--st-muted)]">
+              {item.description}
+            </p>
           </div>
         </div>
       )}

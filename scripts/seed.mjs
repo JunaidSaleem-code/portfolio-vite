@@ -11,6 +11,7 @@ import Section from "../src/models/Section.js";
 import Setting from "../src/models/Setting.js";
 import User from "../src/models/User.js";
 import Achievement from "../src/models/Achievement.js";
+import Testimonial from "../src/models/Testimonial.js";
 
 const { MONGODB_URI, ADMIN_EMAIL, ADMIN_PASSWORD } = process.env;
 
@@ -68,13 +69,13 @@ const bentoItems = [
     image: "",
     spareImage: "",
     cardType: "techStack",
-    techStackLeft: ["Next.js", "Typescript"],
-    techStackRight: ["MongoDb", "Node.js"],
+    techStackLeft: ["Next.js", "TypeScript", "Python"],
+    techStackRight: ["MongoDB", "RAG / LLM", "Capacitor"],
     order: 3,
   },
   {
     title: "Tech enthusiast with a passion for development.",
-    description: "",
+    description: "AI-focused Full-Stack Engineer. RAG, LLM integration, end-to-end product delivery.",
     className: "lg:col-span-2 md:col-span-3 md:row-span-1",
     imgClassName: "",
     titleClassName: "justify-start",
@@ -134,6 +135,62 @@ const projects = [
     body: "A MERN-stack question bank with role-based access (student, teacher, admin), question tagging, search by topic, and a teacher workflow for review and approval before publication.",
     order: 2,
   },
+  {
+    title: "AI Tool Hub",
+    slug: "ai-tool-hub",
+    description:
+      "A fully automated platform that discovers, evaluates, and compares AI tools without manual input. Cron-based pipelines fetch newly released tools and multiple LLM APIs auto-rate, generate insights, and produce comparisons.",
+    image: "/p1.png",
+    techIcons: ["/next.svg", "/ts.svg"],
+    techStack: ["Next.js", "Supabase", "TypeScript", "LLM APIs", "Cron Jobs"],
+    tags: ["AI", "Full-Stack", "Automation"],
+    link: "#",
+    body:
+      "Built an automation-first AI tool directory. A cron pipeline ingests newly released tools, normalizes metadata, and triggers rating workflows where multiple LLMs score and compare each tool across structured criteria. Output is published to a Next.js storefront with filterable categories and per-tool insights — zero manual curation in the steady state.",
+    order: 3,
+  },
+  {
+    title: "RAG-Based AI Application",
+    slug: "rag-app",
+    description:
+      "Retrieval-Augmented Generation system built with embeddings and vector search. Implements semantic search, streaming AI responses, and a retrieval pipeline tuned for answer accuracy and relevance.",
+    image: "/p1.png",
+    techIcons: ["/ts.svg"],
+    techStack: ["SvelteKit", "OpenAI", "Vector DB", "TypeScript"],
+    tags: ["AI", "RAG"],
+    link: "#",
+    body:
+      "End-to-end RAG pipeline: chunking + embedding ingestion, vector index with metadata filtering, hybrid retrieval, and streamed LLM responses with citation rendering. Tuned chunk strategy and re-ranking for measurable improvements in answer accuracy and reduced hallucinations on a domain-specific corpus.",
+    order: 4,
+  },
+  {
+    title: "Nail Health App",
+    slug: "nail-health",
+    description:
+      "AI-powered cross-platform app that detects nail diseases from images. Tracks user health history with progress timelines and uses deep linking for seamless navigation between sessions and care reminders.",
+    image: "/p2.png",
+    techIcons: ["/ts.svg"],
+    techStack: ["Capacitor", "TypeScript", "OpenAI API", "Firebase"],
+    tags: ["AI", "Mobile", "Health"],
+    link: "#",
+    body:
+      "Cross-platform mobile health app (iOS / Android via Capacitor) that classifies nail conditions from user photos using a vision-LLM pipeline. Maintains a per-user health timeline, sends care reminders, and supports deep links so push notifications open the right session in-app.",
+    order: 5,
+  },
+  {
+    title: "Plant Doctor App",
+    slug: "plant-doctor",
+    description:
+      "AI-driven app that detects plant diseases and suggests treatments. Image-based progress tracking lets users monitor recovery; reminders and deep links keep care consistent.",
+    image: "/p2.png",
+    techIcons: ["/ts.svg"],
+    techStack: ["Capacitor", "TypeScript", "OpenAI API", "Firebase"],
+    tags: ["AI", "Mobile"],
+    link: "#",
+    body:
+      "Mobile app that diagnoses plant disease from a photograph and prescribes step-by-step treatment. Users log progress over time with image diffs, and scheduled care notifications use deep links to bring them straight to the active treatment plan.",
+    order: 6,
+  },
 ];
 
 const experiences = [
@@ -160,8 +217,9 @@ const experiences = [
 const approachPhases = [
   {
     phaseLabel: "Phase 1",
-    title: "Planning & Strategy",
-    description: "Establishing project goals, defining the scope, and outlining a clear roadmap to ensure a solid foundation for successful development.",
+    title: "Discovery & Architecture",
+    description:
+      "Map the problem to the right pattern — RAG vs fine-tuning vs prompt engineering — and design retrieval pipelines, schemas, and integration points before any code lands.",
     backgroundClass: "bg-emerald-900",
     animationSpeed: 5.1,
     overlay: false,
@@ -169,8 +227,9 @@ const approachPhases = [
   },
   {
     phaseLabel: "Phase 2",
-    title: "Development & Progress Update",
-    description: "Developing the project from start to finish, tracking progress and providing regular updates to ensure a smooth and efficient development process.",
+    title: "Build & Integrate",
+    description:
+      "Ship the system end-to-end: embedding pipelines, vector search, LLM streaming, full-stack workflows, and the integrations that connect them. Tight feedback loops with the product team.",
     backgroundClass: "bg-lime-50",
     animationSpeed: 3,
     colors: [
@@ -183,8 +242,9 @@ const approachPhases = [
   },
   {
     phaseLabel: "Phase 3",
-    title: "Deployment and Monitoring",
-    description: "Deploying the project to production and providing regular monitoring to ensure a smooth and reliable development experience.",
+    title: "Measure & Refine",
+    description:
+      "Evaluate retrieval accuracy, monitor latency and cost, and iterate on prompts, indexes, and UX. Ship improvements that move real metrics.",
     backgroundClass: "bg-sky-600",
     animationSpeed: 3,
     colors: [[125, 211, 252]],
@@ -225,6 +285,20 @@ const achievements = [
   },
 ];
 
+const testimonials = [
+  {
+    name: "Sarah Khan",
+    role: "Product Manager",
+    company: "Acme Studio",
+    quote:
+      "Junaid shipped our RAG-powered search in under three weeks — chunking, retrieval tuning, streamed responses, the whole pipeline. Clear communication, sharp instincts, and the kind of engineer who actually finishes things.",
+    avatar: "",
+    rating: 5,
+    link: "",
+    order: 1,
+  },
+];
+
 const settings = [
   {
     key: "hero",
@@ -241,11 +315,12 @@ const settings = [
   {
     key: "footer",
     data: {
-      headline: "Ready to take your digital presence to the next level?",
-      paragraph: "Reach out to me today and let's discuss how I can help you achieve your goals.",
-      ctaText: "Let's get in touch",
+      headline: "Have an AI or full-stack project in mind?",
+      paragraph:
+        "I help teams ship RAG systems, LLM-integrated apps, and end-to-end web platforms. Let's talk about what you're building.",
+      ctaText: "Get in touch",
       contactEmail: "chmjunaidsaleem@gmail.com",
-      copyright: "Copyright © 2024 Junaid",
+      copyright: "© 2025 Choudhary Muhammad Junaid",
     },
   },
 ];
@@ -264,6 +339,20 @@ async function seedCollection(Model, docs, { uniqueBy } = {}) {
   }
   await Model.insertMany(docs);
   return docs.length;
+}
+
+// Insert any docs whose `uniqueBy` value isn't already in the collection.
+// Preserves existing edits — only adds what's missing.
+async function addMissing(Model, docs, uniqueBy) {
+  let added = 0;
+  for (const doc of docs) {
+    const exists = await Model.findOne({ [uniqueBy]: doc[uniqueBy] }).select("_id").lean();
+    if (!exists) {
+      await Model.create(doc);
+      added += 1;
+    }
+  }
+  return added;
 }
 
 async function seedAdmin() {
@@ -295,11 +384,12 @@ async function main() {
   counts.settings = await seedCollection(Setting, settings, { uniqueBy: "key" });
   counts.navItems = await seedCollection(NavItem, navItems);
   counts.bentoItems = await seedCollection(BentoItem, bentoItems);
-  counts.projects = await seedCollection(Project, projects);
+  counts.projects = await addMissing(Project, projects, "slug");
   counts.experiences = await seedCollection(Experience, experiences);
   counts.approachPhases = await seedCollection(ApproachPhase, approachPhases);
   counts.socialLinks = await seedCollection(SocialLink, socialLinks);
   counts.achievements = await seedCollection(Achievement, achievements);
+  counts.testimonials = await seedCollection(Testimonial, testimonials);
 
   await seedAdmin();
 

@@ -23,7 +23,7 @@ const Footer = ({ content, socialLinks = [] }) => {
     <>
       <footer className="w-full mb-[100px] pb-10" id="contact">
         <div className="flex flex-col items-center">
-          <h1 className=" md:text-3xl text-2xl font-bold text-center lg:max-w-[45vw] text-white">
+          <h1 className=" md:text-3xl text-2xl font-bold text-center lg:max-w-[45vw] text-zinc-900 dark:text-white">
             {headline.split(" your ").length > 1 ? (
               <>
                 {headline.split(" your ")[0]} <span className="text-purple-400">your</span>{" "}
@@ -33,7 +33,7 @@ const Footer = ({ content, socialLinks = [] }) => {
               headline
             )}
           </h1>
-          <p className="text-white md:mt-10 my-5 text-center">{paragraph}</p>
+          <p className="text-zinc-700 dark:text-white md:mt-10 my-5 text-center">{paragraph}</p>
           <button type="button" onClick={() => setContactOpen(true)} className="cursor-pointer">
             <MagicButton title={ctaText} icon={<FaLocationArrow />} position="right" />
           </button>
@@ -47,7 +47,7 @@ const Footer = ({ content, socialLinks = [] }) => {
         </div>
 
         <div className="flex mt-16 md:flex-row flex-col justify-between items-center">
-          <p className="md:text-base text-sm md:font-normal font-light text-blue-100">{copyright}</p>
+          <p className="md:text-base text-sm md:font-normal font-light text-zinc-600 dark:text-blue-100">{copyright}</p>
 
           <div className="flex items-center md:gap-3 gap-6">
             {socialLinks.map((profile) => (
@@ -56,7 +56,7 @@ const Footer = ({ content, socialLinks = [] }) => {
                 href={profile.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 cursor-pointer flex justify-center items-center backdrop-filter backdrop-blur-lg saturate-180 bg-opacity-75 bg-black-200 rounded-lg border border-black-300"
+                className="w-10 h-10 cursor-pointer flex justify-center items-center backdrop-filter backdrop-blur-lg saturate-180 rounded-lg bg-white/70 border border-zinc-200 hover:border-purple-400 hover:bg-zinc-50 transition dark:bg-black/40 dark:border-zinc-800 dark:hover:bg-zinc-900"
               >
                 {profile.icon && (
                   <Image src={profile.icon} alt={profile.label || ""} width={20} height={20} />

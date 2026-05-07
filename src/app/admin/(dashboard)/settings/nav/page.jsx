@@ -19,8 +19,12 @@ export default function NavSettings() {
       defaultValues={DEFAULTS}
       renderSummary={(item) => (
         <div className="min-w-0">
-          <p className="truncate font-medium text-white">{item.name}</p>
-          <p className="truncate text-xs text-zinc-500">{item.link}</p>
+          <p className="truncate text-[14.5px] font-medium text-[var(--st-ink)]">
+            {item.name}
+          </p>
+          <p className="st-mono truncate text-[10.5px] uppercase tracking-[0.18em] text-[var(--st-muted)]">
+            {item.link}
+          </p>
         </div>
       )}
     />

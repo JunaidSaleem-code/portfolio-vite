@@ -40,10 +40,10 @@ const Approach = ({ phases }) => {
 
   return (
     <section className="w-full py-20">
-      <h1 className="heading text-white">
+      <h1 className="heading text-zinc-900 dark:text-white">
         My <span className="text-purple-400">Approach</span>
       </h1>
-      <div className="my-20 flex flex-col lg:flex-row items-center justify-center gap-4 ">
+      <div className="my-20 mx-auto max-w-7xl px-4 flex flex-col lg:flex-row items-stretch justify-center gap-6 lg:gap-8">
         {items.map((phase) => (
           <Card
             key={phase._id || phase.phaseLabel}
@@ -73,12 +73,12 @@ const Card = ({ title, icon, children, description }) => {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="border border-black/[0.2] group/canvas-card flex items-center justify-center dark:border-white/[0.2]  max-w-sm w-full mx-auto p-4 relative lg:h-[30rem] rounded-3xl"
+      className="border border-black/[0.2] group/canvas-card flex items-center justify-center dark:border-white/[0.2] w-full max-w-md lg:max-w-none lg:flex-1 p-6 relative lg:h-[34rem] rounded-3xl"
     >
-      <Icon className="absolute h-6 w-6 -top-3 -left-3 text-white " />
-      <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-white " />
-      <Icon className="absolute h-6 w-6 -top-3 -right-3 text-white " />
-      <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-white " />
+      <Icon className="absolute h-6 w-6 -top-3 -left-3 text-zinc-900 dark:text-white" />
+      <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-zinc-900 dark:text-white" />
+      <Icon className="absolute h-6 w-6 -top-3 -right-3 text-zinc-900 dark:text-white" />
+      <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-zinc-900 dark:text-white" />
 
       <AnimatePresence>
         {hovered && (

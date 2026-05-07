@@ -17,9 +17,13 @@ export default function SectionsPage() {
       allowDelete={false}
       renderSummary={(item) => (
         <div className="min-w-0">
-          <p className="truncate font-medium text-white">{item.label}</p>
-          <p className="text-xs text-zinc-500">
-            <code className="rounded bg-white/5 px-1 py-0.5">{item.key}</code>
+          <p className="truncate text-[14.5px] font-medium text-[var(--st-ink)]">
+            {item.label}
+          </p>
+          <p className="mt-1">
+            <code className="st-mono rounded bg-[var(--st-bg-2)] px-2 py-0.5 text-[10.5px] uppercase tracking-[0.18em] text-[var(--st-ink-2)]">
+              {item.key}
+            </code>
           </p>
         </div>
       )}

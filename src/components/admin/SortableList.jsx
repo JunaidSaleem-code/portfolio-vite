@@ -37,10 +37,10 @@ export default function SortableList({ items, onReorder, getId, renderItem }) {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext items={items.map(getId)} strategy={verticalListSortingStrategy}>
-        <ul className="flex flex-col gap-3">
-          {items.map((item) => (
+        <ul className="flex flex-col gap-2.5">
+          {items.map((item, index) => (
             <SortableRow key={getId(item)} id={getId(item)}>
-              {(handleProps) => renderItem(item, handleProps)}
+              {(handleProps) => renderItem(item, handleProps, index)}
             </SortableRow>
           ))}
         </ul>
@@ -55,14 +55,15 @@ function SortableRow({ id, children }) {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.6 : 1,
+    zIndex: isDragging ? 10 : "auto",
   };
   const handleProps = {
     ...attributes,
     ...listeners,
     className:
-      "cursor-grab touch-none rounded-md p-2 text-zinc-500 transition hover:bg-white/5 hover:text-white active:cursor-grabbing",
+      "st-icon-btn cursor-grab touch-none active:cursor-grabbing",
     "aria-label": "Drag to reorder",
-    children: <LuGripVertical className="h-5 w-5" />,
+    children: <LuGripVertical className="h-4 w-4" />,
   };
 
   return (

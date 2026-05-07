@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { LuX, LuSend, LuMail, LuLoader, LuCircleCheck } from "react-icons/lu";
 
 const inputCls =
-  "w-full rounded-md border border-white/10 bg-black px-3 py-2 text-white outline-none transition focus:border-purple-400 placeholder:text-zinc-600";
+  "w-full rounded-xl border border-[var(--st-line-2)] bg-[var(--st-bg)] px-3.5 py-2.5 text-[var(--st-ink)] outline-none transition placeholder:text-[var(--st-muted-2)] focus:border-[var(--st-ink)] focus:ring-2 focus:ring-[var(--st-accent)]/40";
 
 export default function ContactDialog({ open, onClose, fallbackEmail }) {
   const [submitting, setSubmitting] = useState(false);
@@ -60,38 +60,55 @@ export default function ContactDialog({ open, onClose, fallbackEmail }) {
 
   return (
     <div
-      className="fixed inset-0 z-[6000] flex items-center justify-center bg-black/80 p-4"
+      className="fixed inset-0 z-[6000] flex items-end justify-center bg-[var(--st-ink)]/55 px-3 py-3 backdrop-blur-sm sm:items-center sm:p-4"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg rounded-2xl border border-white/10 bg-zinc-950 shadow-2xl"
+        className="st-up w-full max-w-lg overflow-hidden rounded-3xl border border-[var(--st-line-2)] bg-[var(--st-paper)] shadow-[0_40px_80px_-20px_rgba(15,27,34,0.4)]"
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
-          <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
-            <LuMail className="h-5 w-5 text-purple-300" />
-            Send a message
-          </h2>
+        {/* Header */}
+        <div className="relative flex items-center justify-between border-b border-[var(--st-line-2)] px-5 py-4 sm:px-7 sm:py-5">
+          <div className="flex items-center gap-3">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--st-ink)] text-[var(--st-accent)]">
+              <LuMail className="h-4 w-4" />
+            </span>
+            <div className="flex flex-col">
+              <span className="st-mono text-[10px] uppercase tracking-[0.28em] text-[var(--st-muted)]">
+                ⑥ Contact
+              </span>
+              <h2 className="st-display text-lg leading-none text-[var(--st-ink)] sm:text-xl">
+                Send a <span className="st-italic font-normal">message.</span>
+              </h2>
+            </div>
+          </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md p-1 text-zinc-400 transition hover:bg-white/5 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--st-line-2)] text-[var(--st-ink)] transition hover:border-[var(--st-ink)]"
             aria-label="Close"
           >
-            <LuX className="h-5 w-5" />
+            <LuX className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="p-6">
+        {/* Body */}
+        <div className="px-5 py-5 sm:px-7 sm:py-6">
           {success ? (
-            <div className="flex flex-col items-center gap-3 py-6 text-center">
-              <LuCircleCheck className="h-12 w-12 text-emerald-400" />
-              <h3 className="text-lg font-semibold text-white">Message sent</h3>
-              <p className="text-sm text-zinc-400">I'll get back to you soon.</p>
+            <div className="flex flex-col items-center gap-3 py-4 text-center sm:py-6">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--st-accent)] text-[var(--st-ink)]">
+                <LuCircleCheck className="h-7 w-7" />
+              </span>
+              <h3 className="st-display text-2xl leading-tight text-[var(--st-ink)]">
+                Message <span className="st-italic font-normal">sent.</span>
+              </h3>
+              <p className="text-sm text-[var(--st-ink-2)]">
+                I&apos;ll get back to you soon.
+              </p>
               <button
                 type="button"
                 onClick={onClose}
-                className="mt-2 rounded-md bg-purple-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-purple-400"
+                className="st-cta st-cta--dark mt-3"
               >
                 Close
               </button>
@@ -99,17 +116,30 @@ export default function ContactDialog({ open, onClose, fallbackEmail }) {
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label className="flex flex-col gap-1.5">
-                <span className="text-sm text-zinc-300">Your name</span>
-                <input name="name" type="text" required minLength={1} maxLength={100} className={inputCls} />
+                <span className="st-mono text-[11px] uppercase tracking-[0.18em] text-[var(--st-muted)]">
+                  Your name
+                </span>
+                <input
+                  name="name"
+                  type="text"
+                  required
+                  minLength={1}
+                  maxLength={100}
+                  className={inputCls}
+                />
               </label>
 
               <label className="flex flex-col gap-1.5">
-                <span className="text-sm text-zinc-300">Email</span>
+                <span className="st-mono text-[11px] uppercase tracking-[0.18em] text-[var(--st-muted)]">
+                  Email
+                </span>
                 <input name="email" type="email" required className={inputCls} />
               </label>
 
               <label className="flex flex-col gap-1.5">
-                <span className="text-sm text-zinc-300">Message</span>
+                <span className="st-mono text-[11px] uppercase tracking-[0.18em] text-[var(--st-muted)]">
+                  Message
+                </span>
                 <textarea
                   name="message"
                   required
@@ -122,7 +152,7 @@ export default function ContactDialog({ open, onClose, fallbackEmail }) {
               </label>
 
               {error && (
-                <p className="rounded-md border border-red-900/50 bg-red-950/40 px-3 py-2 text-sm text-red-300">
+                <p className="rounded-xl border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">
                   {error}
                 </p>
               )}
@@ -130,7 +160,7 @@ export default function ContactDialog({ open, onClose, fallbackEmail }) {
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-purple-500 px-4 py-2.5 font-medium text-white transition hover:bg-purple-400 disabled:cursor-not-allowed disabled:opacity-50"
+                className="st-cta st-cta--dark mt-1 w-full justify-center disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {submitting ? (
                   <>
@@ -144,9 +174,12 @@ export default function ContactDialog({ open, onClose, fallbackEmail }) {
               </button>
 
               {fallbackEmail && (
-                <p className="text-center text-xs text-zinc-500">
+                <p className="st-mono text-center text-[10px] uppercase tracking-[0.2em] text-[var(--st-muted)]">
                   Or email me directly at{" "}
-                  <a href={`mailto:${fallbackEmail}`} className="text-purple-300 hover:underline">
+                  <a
+                    href={`mailto:${fallbackEmail}`}
+                    className="st-link normal-case tracking-normal text-[var(--st-ink-2)] hover:text-[var(--st-ink)]"
+                  >
                     {fallbackEmail}
                   </a>
                 </p>

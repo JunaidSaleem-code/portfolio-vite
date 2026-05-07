@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LuUpload, LuX, LuLibrary } from "react-icons/lu";
+import { LuUpload, LuX, LuLibrary, LuLink } from "react-icons/lu";
 import { apiSignUpload } from "@/lib/api-client";
 import ImageLibraryDialog from "../ImageLibraryDialog";
 
@@ -58,21 +58,22 @@ export default function ImageField({ value, onChange, folder = "portfolio" }) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3">
       {value ? (
         <div className="relative inline-block">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={value}
             alt=""
-            className="h-32 w-32 rounded-md border border-white/10 object-cover"
+            className="h-36 w-36 rounded-2xl border border-[var(--st-line-2)] object-cover shadow-[0_18px_36px_-22px_rgba(15,27,34,0.35)]"
           />
           <button
             type="button"
             onClick={() => onChange("")}
-            className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-400"
+            className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full border border-[var(--st-ink)] bg-[var(--st-paper)] text-[var(--st-ink)] transition hover:bg-[var(--st-ink)] hover:text-[var(--st-accent)]"
             aria-label="Remove image"
           >
-            <LuX className="h-3 w-3" />
+            <LuX className="h-3.5 w-3.5" />
           </button>
         </div>
       ) : (
@@ -84,20 +85,25 @@ export default function ImageField({ value, onChange, folder = "portfolio" }) {
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
           className={
-            "flex flex-col items-center justify-center gap-1.5 rounded-md border-2 border-dashed py-6 text-sm transition " +
+            "flex flex-col items-center justify-center gap-2 rounded-2xl border-[1.5px] border-dashed py-10 text-center transition " +
             (dragOver
-              ? "border-purple-400 bg-purple-500/10 text-purple-200"
-              : "border-white/10 bg-zinc-950 text-zinc-500")
+              ? "border-[var(--st-ink)] bg-[var(--st-accent)]/30"
+              : "border-[var(--st-line-2)] bg-[var(--st-bg)]/40")
           }
         >
-          <LuUpload className="h-5 w-5" />
-          <span>Drag an image here, or use the buttons below</span>
+          <LuUpload className="h-5 w-5 text-[var(--st-ink-2)]" />
+          <span className="st-italic text-[16px] text-[var(--st-ink)]">
+            Drop image here
+          </span>
+          <span className="st-mono text-[10.5px] uppercase tracking-[0.2em] text-[var(--st-muted)]">
+            or use the buttons below
+          </span>
         </div>
       )}
 
       <div className="flex flex-wrap items-center gap-2">
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 transition hover:bg-zinc-800">
-          <LuUpload className="h-4 w-4" />
+        <label className="st-cta st-cta--ghost st-cta--xs cursor-pointer">
+          <LuUpload className="h-3.5 w-3.5" />
           {uploading ? "Uploading…" : value ? "Replace" : "Upload"}
           <input
             type="file"
@@ -111,22 +117,25 @@ export default function ImageField({ value, onChange, folder = "portfolio" }) {
         <button
           type="button"
           onClick={() => setLibraryOpen(true)}
-          className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 transition hover:bg-zinc-800"
+          className="st-cta st-cta--ghost st-cta--xs"
         >
-          <LuLibrary className="h-4 w-4" />
+          <LuLibrary className="h-3.5 w-3.5" />
           Library
         </button>
 
-        <input
-          type="text"
-          value={value || ""}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="…or paste URL / path"
-          className="min-w-[12rem] flex-1 rounded-md border border-white/10 bg-black px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-purple-400"
-        />
+        <div className="relative flex-1 min-w-[12rem]">
+          <LuLink className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--st-muted)]" />
+          <input
+            type="text"
+            value={value || ""}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="…or paste URL / path"
+            className="st-input pl-9 text-[13px]"
+          />
+        </div>
       </div>
 
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="st-error">{error}</p>}
 
       <ImageLibraryDialog
         open={libraryOpen}

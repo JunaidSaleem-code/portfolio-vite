@@ -23,17 +23,20 @@ export default function EntityFormDialog({
     if (open) reset(initialValues || {});
   }, [open, initialValues, reset]);
 
+  const isEdit = (title || "").toLowerCase().startsWith("edit");
+
   return (
     <Modal
       open={open}
       onClose={onClose}
       title={title}
+      eyebrow={isEdit ? "Edit entry" : "New entry"}
       footer={
         <>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md border border-white/10 px-4 py-2 text-sm text-zinc-300 transition hover:bg-white/5"
+            className="st-cta st-cta--ghost st-cta--sm"
           >
             Cancel
           </button>
@@ -41,14 +44,14 @@ export default function EntityFormDialog({
             type="submit"
             form="entity-form"
             disabled={submitting}
-            className="rounded-md bg-purple-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-purple-400 disabled:cursor-not-allowed disabled:opacity-50"
+            className="st-cta st-cta--sm disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {submitting ? "Saving…" : "Save"}
+            {submitting ? "Saving…" : "Save changes"}
           </button>
         </>
       }
     >
-      <form id="entity-form" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <form id="entity-form" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
         {fields.map((field) => (
           <Field
             key={field.name}
@@ -59,11 +62,7 @@ export default function EntityFormDialog({
             setValue={setValue}
           />
         ))}
-        {error && (
-          <p className="rounded-md border border-red-900/50 bg-red-950/40 px-3 py-2 text-sm text-red-300">
-            {error}
-          </p>
-        )}
+        {error && <p className="st-error-banner">{error}</p>}
       </form>
     </Modal>
   );

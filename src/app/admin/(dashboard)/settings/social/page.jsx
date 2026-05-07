@@ -20,13 +20,22 @@ export default function SocialSettings() {
       fields={FIELDS}
       defaultValues={DEFAULTS}
       renderSummary={(item) => (
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="flex min-w-0 items-center gap-3">
           {item.icon && (
-            <img src={item.icon} alt="" className="h-8 w-8 shrink-0 rounded bg-zinc-900 p-1" />
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={item.icon}
+              alt=""
+              className="h-9 w-9 shrink-0 rounded-full border border-[var(--st-line)] bg-[var(--st-paper)] p-1.5"
+            />
           )}
           <div className="min-w-0">
-            <p className="truncate font-medium text-white">{item.label || "(unlabeled)"}</p>
-            <p className="truncate text-xs text-zinc-500">{item.link}</p>
+            <p className="truncate text-[14.5px] font-medium text-[var(--st-ink)]">
+              {item.label || "(unlabeled)"}
+            </p>
+            <p className="st-mono truncate text-[10.5px] uppercase tracking-[0.18em] text-[var(--st-muted)]">
+              {item.link}
+            </p>
           </div>
         </div>
       )}

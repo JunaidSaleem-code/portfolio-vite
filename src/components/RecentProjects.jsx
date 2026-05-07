@@ -21,7 +21,7 @@ const RecentProjects = ({ items = [] }) => {
 
   return (
     <div className="py-20" id="projects">
-      <h1 className="heading text-white">
+      <h1 className="heading text-zinc-900 dark:text-white">
         A small selection of{" "}
         <span className="text-purple-400">Recent Projects</span>
       </h1>
@@ -34,8 +34,8 @@ const RecentProjects = ({ items = [] }) => {
             className={
               "rounded-full border px-3 py-1 text-xs transition " +
               (activeTag === null
-                ? "border-purple-400 bg-purple-500/20 text-purple-200"
-                : "border-white/10 text-zinc-400 hover:border-white/30 hover:text-white")
+                ? "border-purple-400 bg-purple-500/20 text-purple-700 dark:text-purple-200"
+                : "border-zinc-300 text-zinc-600 hover:border-purple-400 hover:text-purple-600 dark:border-white/10 dark:text-zinc-400 dark:hover:border-white/30 dark:hover:text-white")
             }
           >
             All
@@ -48,8 +48,8 @@ const RecentProjects = ({ items = [] }) => {
               className={
                 "rounded-full border px-3 py-1 text-xs transition " +
                 (activeTag === tag
-                  ? "border-purple-400 bg-purple-500/20 text-purple-200"
-                  : "border-white/10 text-zinc-400 hover:border-white/30 hover:text-white")
+                  ? "border-purple-400 bg-purple-500/20 text-purple-700 dark:text-purple-200"
+                  : "border-zinc-300 text-zinc-600 hover:border-purple-400 hover:text-purple-600 dark:border-white/10 dark:text-zinc-400 dark:hover:border-white/30 dark:hover:text-white")
               }
             >
               {tag}
@@ -109,7 +109,7 @@ const RecentProjects = ({ items = [] }) => {
           return (
             <div
               key={_id || id}
-              className="sm:h-[41rem] h-[32rem] lg:min-h-[32.5rem] flex items-center justify-center sm:w-[570px] w-[80vw] text-blue-50 "
+              className="sm:h-[41rem] h-[32rem] lg:min-h-[32.5rem] flex items-center justify-center sm:w-[570px] w-[80vw] text-zinc-900 dark:text-blue-50"
             >
               {detailHref ? <Link href={detailHref}>{cardInner}</Link> : cardInner}
             </div>

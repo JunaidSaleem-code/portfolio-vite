@@ -4,9 +4,6 @@ import ImageField from "./ImageField";
 import ListField from "./ListField";
 import MarkdownEditor from "./MarkdownEditor";
 
-const baseInput =
-  "w-full rounded-md border border-white/10 bg-black px-3 py-2 text-white outline-none transition focus:border-purple-400 placeholder:text-zinc-600";
-
 export default function Field({ field, register, control, errors, watch, setValue }) {
   const error = errors?.[field.name]?.message;
 
@@ -17,7 +14,7 @@ export default function Field({ field, register, control, errors, watch, setValu
           {...register(field.name)}
           rows={field.rows || 3}
           placeholder={field.placeholder}
-          className={baseInput}
+          className="st-input resize-y"
         />
       </Wrapper>
     );
@@ -26,22 +23,53 @@ export default function Field({ field, register, control, errors, watch, setValu
   if (field.type === "select") {
     return (
       <Wrapper field={field} error={error}>
-        <select {...register(field.name)} className={baseInput}>
-          {field.options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+        <div className="relative">
+          <select {...register(field.name)} className="st-input appearance-none pr-9">
+            {field.options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <span
+            aria-hidden
+            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[var(--st-muted)]"
+          >
+            ▾
+          </span>
+        </div>
       </Wrapper>
     );
   }
 
   if (field.type === "checkbox") {
     return (
-      <label className="flex items-center gap-2 text-sm text-zinc-300">
-        <input type="checkbox" {...register(field.name)} className="h-4 w-4" />
-        {field.label}
+      <label className="group flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--st-line)] bg-[var(--st-paper)] px-4 py-3 transition hover:border-[var(--st-line-2)] has-[:checked]:border-[var(--st-ink)]">
+        <input
+          type="checkbox"
+          {...register(field.name)}
+          className="peer sr-only"
+        />
+        <span
+          aria-hidden
+          className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-[1.5px] border-[var(--st-ink)] bg-[var(--st-bg)] transition-colors peer-checked:bg-[var(--st-accent)]"
+        >
+          <svg
+            viewBox="0 0 12 12"
+            className="h-3 w-3 scale-0 text-[var(--st-ink)] transition-transform group-has-[:checked]:scale-100"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M2.5 6.5l2.5 2.5 4.5-5" />
+          </svg>
+        </span>
+        <span className="text-[14px] text-[var(--st-ink)]">{field.label}</span>
+        {field.help && (
+          <span className="ml-auto text-[12px] text-[var(--st-muted)]">{field.help}</span>
+        )}
       </label>
     );
   }
@@ -91,7 +119,7 @@ export default function Field({ field, register, control, errors, watch, setValu
         type={field.type || "text"}
         {...register(field.name)}
         placeholder={field.placeholder}
-        className={baseInput}
+        className="st-input"
       />
     </Wrapper>
   );
@@ -99,14 +127,13 @@ export default function Field({ field, register, control, errors, watch, setValu
 
 function Wrapper({ field, error, children }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-sm text-zinc-300">
+    <div className="flex flex-col gap-2">
+      <label className={"st-label " + (field.required ? "st-label--req" : "")}>
         {field.label}
-        {field.required && <span className="text-red-400"> *</span>}
       </label>
       {children}
-      {field.help && <p className="text-xs text-zinc-500">{field.help}</p>}
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {field.help && <p className="st-help">{field.help}</p>}
+      {error && <p className="st-error">{error}</p>}
     </div>
   );
 }

@@ -34,13 +34,13 @@ export default function AchievementsPage() {
       defaultValues={DEFAULTS}
       renderSummary={(item) => (
         <div className="min-w-0">
-          <p className="truncate font-medium text-white">
-            <span className="mr-2 inline-block rounded bg-purple-500/20 px-2 py-0.5 text-xs uppercase text-purple-300">
-              {item.type}
+          <p className="flex min-w-0 items-center gap-2">
+            <span className="st-pill st-pill--accent shrink-0">{item.type}</span>
+            <span className="truncate text-[14.5px] font-medium text-[var(--st-ink)]">
+              {item.title}
             </span>
-            {item.title}
           </p>
-          <p className="truncate text-xs text-zinc-500">
+          <p className="st-mono mt-1 truncate text-[10.5px] uppercase tracking-[0.18em] text-[var(--st-muted)]">
             {[item.organization, item.period].filter(Boolean).join(" · ")}
           </p>
         </div>

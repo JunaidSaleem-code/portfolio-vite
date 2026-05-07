@@ -51,13 +51,14 @@ export default function SubscribersPage() {
   return (
     <>
       <PageHeader
+        eyebrow="newsletter"
         title="Subscribers"
         description={`${subs.length} ${subs.length === 1 ? "person has" : "people have"} subscribed.`}
         action={
           subs.length > 0 && (
             <a
               href="/api/subscribers/export"
-              className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-zinc-900 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
+              className="st-cta st-cta--ghost st-cta--sm"
             >
               <LuDownload className="h-4 w-4" /> Export CSV
             </a>
@@ -66,14 +67,14 @@ export default function SubscribersPage() {
       />
 
       {subs.length > 0 && (
-        <div className="mb-4 relative max-w-sm">
-          <LuSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+        <div className="relative mb-5 max-w-sm">
+          <LuSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--st-muted)]" />
           <input
             type="text"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Filter by email, name, source"
-            className="w-full rounded-md border border-white/10 bg-black py-2 pl-9 pr-3 text-sm text-white outline-none transition focus:border-purple-400 placeholder:text-zinc-600"
+            className="st-input pl-9 text-[13.5px]"
           />
         </div>
       )}
@@ -81,52 +82,78 @@ export default function SubscribersPage() {
       {isLoading ? (
         <ListSkeleton rows={5} />
       ) : isError ? (
-        <p className="rounded-md border border-red-900/50 bg-red-950/40 px-3 py-2 text-sm text-red-300">
-          {error.message}
-        </p>
+        <p className="st-error-banner">{error.message}</p>
       ) : filtered.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-white/10 bg-zinc-950 px-4 py-8 text-center text-sm text-zinc-500">
-          {subs.length === 0
-            ? "No subscribers yet. Once visitors opt in via the footer form, they'll appear here."
-            : "No matches for that filter."}
-        </p>
+        <div className="st-card--dashed flex flex-col items-center gap-2 px-6 py-12 text-center">
+          <span className="st-eyebrow">— empty</span>
+          <p className="st-italic text-[18px] text-[var(--st-ink)]">
+            {subs.length === 0
+              ? "No subscribers yet."
+              : "No matches for that filter."}
+          </p>
+          {subs.length === 0 && (
+            <p className="text-[13px] text-[var(--st-muted)]">
+              Visitors who opt in via the footer form will appear here.
+            </p>
+          )}
+        </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-zinc-950">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-white/10 bg-zinc-900 text-xs uppercase tracking-widest text-zinc-500">
-              <tr>
-                <th className="px-4 py-3">Email</th>
-                <th className="px-4 py-3">Name</th>
-                <th className="px-4 py-3">Source</th>
-                <th className="px-4 py-3">Subscribed</th>
-                <th className="px-4 py-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((s) => (
-                <tr key={s._id} className="border-b border-white/5 last:border-b-0">
-                  <td className="px-4 py-3 font-medium text-white">{s.email}</td>
-                  <td className="px-4 py-3 text-zinc-400">{s.name || "—"}</td>
-                  <td className="px-4 py-3 text-zinc-400">
-                    <span className="rounded bg-white/5 px-2 py-0.5 text-xs">{s.source || "unknown"}</span>
-                  </td>
-                  <td className="px-4 py-3 text-zinc-500">
-                    {new Date(s.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(s)}
-                      className="rounded-md p-2 text-zinc-400 transition hover:bg-white/5 hover:text-red-400"
-                      aria-label="Delete subscriber"
-                    >
-                      <LuTrash2 className="h-4 w-4" />
-                    </button>
-                  </td>
+        <div className="st-card overflow-hidden p-0">
+          <div className="-mx-px overflow-x-auto">
+            <table className="st-table min-w-[640px]">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th className="hidden sm:table-cell">Name</th>
+                  <th className="hidden md:table-cell">Source</th>
+                  <th>Subscribed</th>
+                  <th className="text-right">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map((s) => (
+                  <tr key={s._id}>
+                    <td>
+                      <div className="flex flex-col gap-0.5 min-w-0">
+                        <span className="truncate font-medium text-[var(--st-ink)]">
+                          {s.email}
+                        </span>
+                        {s.name && (
+                          <span className="truncate text-[12px] text-[var(--st-muted)] sm:hidden">
+                            {s.name}
+                          </span>
+                        )}
+                        {s.source && (
+                          <span className="st-mono text-[9.5px] uppercase tracking-[0.18em] text-[var(--st-muted)] md:hidden">
+                            via {s.source}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="hidden sm:table-cell">{s.name || "—"}</td>
+                    <td className="hidden md:table-cell">
+                      <span className="st-pill">{s.source || "unknown"}</span>
+                    </td>
+                    <td>
+                      <span className="st-mono whitespace-nowrap text-[10.5px] uppercase tracking-[0.18em] text-[var(--st-muted)]">
+                        {new Date(s.createdAt).toLocaleDateString()}
+                      </span>
+                    </td>
+                    <td className="text-right">
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(s)}
+                        className="st-icon-btn st-icon-btn--danger"
+                        aria-label="Delete subscriber"
+                      >
+                        <LuTrash2 className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </>

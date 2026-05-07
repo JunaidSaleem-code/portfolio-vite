@@ -47,10 +47,17 @@ export default function ApproachSettings() {
       defaultValues={DEFAULTS}
       renderSummary={(item) => (
         <div className="min-w-0">
-          <p className="truncate font-medium text-white">
-            {item.phaseLabel} — {item.title}
+          <p className="flex min-w-0 items-center gap-2">
+            <span className="st-mono shrink-0 text-[10px] uppercase tracking-[0.2em] text-[var(--st-muted)]">
+              {item.phaseLabel}
+            </span>
+            <span className="truncate text-[14.5px] font-medium text-[var(--st-ink)]">
+              {item.title}
+            </span>
           </p>
-          <p className="line-clamp-1 text-xs text-zinc-500">{item.description}</p>
+          <p className="mt-1 line-clamp-1 text-[12.5px] text-[var(--st-muted)]">
+            {item.description}
+          </p>
         </div>
       )}
     />

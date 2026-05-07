@@ -1,28 +1,22 @@
 export function Skeleton({ className = "" }) {
-  return (
-    <div
-      className={
-        "animate-pulse rounded-md bg-zinc-800/60 " + className
-      }
-    />
-  );
+  return <div className={"st-skeleton " + className} />;
 }
 
 export function ListSkeleton({ rows = 3 }) {
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="flex flex-col gap-2.5">
       {Array.from({ length: rows }).map((_, i) => (
         <li
           key={i}
-          className="flex items-center gap-3 rounded-lg border border-white/10 bg-zinc-950 p-3"
+          className="st-card--flat flex items-center gap-3 px-3 py-3"
         >
-          <Skeleton className="h-5 w-5 rounded" />
-          <Skeleton className="h-12 w-16 rounded" />
+          <Skeleton className="h-7 w-7 rounded-full" />
+          <Skeleton className="h-12 w-16 rounded-md" />
           <div className="flex flex-1 flex-col gap-2">
             <Skeleton className="h-4 w-1/3" />
             <Skeleton className="h-3 w-1/2" />
           </div>
-          <Skeleton className="h-8 w-24 rounded-md" />
+          <Skeleton className="h-7 w-24 rounded-full" />
         </li>
       ))}
     </ul>
@@ -35,7 +29,7 @@ export function FormSkeleton({ rows = 4 }) {
       {Array.from({ length: rows }).map((_, i) => (
         <div key={i} className="flex flex-col gap-2">
           <Skeleton className="h-3 w-24" />
-          <Skeleton className="h-10 w-full rounded-md" />
+          <Skeleton className="h-10 w-full rounded-lg" />
         </div>
       ))}
     </div>

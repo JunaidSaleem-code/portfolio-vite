@@ -21,7 +21,7 @@ const DEFAULTS = {
 export default function FooterSettings() {
   return (
     <div className="max-w-2xl">
-      <p className="mb-6 text-sm text-zinc-400">
+      <p className="mb-6 max-w-xl text-[13.5px] leading-relaxed text-[var(--st-ink-2)]">
         Text shown in the footer / contact section.
       </p>
       <SettingForm settingKey="footer" fields={FIELDS} defaultValues={DEFAULTS} />

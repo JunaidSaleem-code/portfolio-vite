@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { signOut } from "next-auth/react";
+import { LuCheck, LuKey, LuUser } from "react-icons/lu";
 import PasswordInput from "@/components/admin/forms/PasswordInput";
 import {
   apiGetProfile,
@@ -11,15 +12,35 @@ import {
   apiChangePassword,
 } from "@/lib/api-client";
 
-const inputCls =
-  "w-full rounded-md border border-white/10 bg-black px-3 py-2 text-white outline-none transition focus:border-purple-400 placeholder:text-zinc-600";
-
 export default function AccountPage() {
   return (
     <div className="flex max-w-2xl flex-col gap-10">
       <ProfileSection />
-      <hr className="border-white/10" />
       <PasswordSection />
+      <FallbackBox />
+    </div>
+  );
+}
+
+function SectionHeader({ icon: Icon, eyebrow, title, description }) {
+  return (
+    <div className="mb-6">
+      <div className="flex items-center gap-3">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--st-line-2)] bg-[var(--st-bg)] text-[var(--st-ink)]">
+          <Icon className="h-4 w-4" />
+        </span>
+        <div>
+          <p className="st-mono text-[10px] uppercase tracking-[0.22em] text-[var(--st-muted)]">
+            — {eyebrow}
+          </p>
+          <h2 className="st-italic text-[22px] leading-tight text-[var(--st-ink)]">
+            {title}
+          </h2>
+        </div>
+      </div>
+      {description && (
+        <p className="mt-3 text-[13.5px] text-[var(--st-ink-2)]">{description}</p>
+      )}
     </div>
   );
 }
@@ -53,57 +74,58 @@ function ProfileSection() {
   });
 
   return (
-    <section>
-      <h2 className="mb-1 text-lg font-semibold text-white">Profile</h2>
-      <p className="mb-5 text-sm text-zinc-400">
-        Your display name. Email is shown for reference and can't be changed here.
-      </p>
+    <section className="st-card p-5 sm:p-7 md:p-8">
+      <SectionHeader
+        icon={LuUser}
+        eyebrow="profile"
+        title="Display & identity"
+        description="Your display name. Email is shown for reference and can't be changed here."
+      />
 
       {isLoading ? (
-        <p className="text-sm text-zinc-500">Loading…</p>
+        <p className="st-italic text-[14px] text-[var(--st-muted)]">Loading…</p>
       ) : (
         <form
           onSubmit={handleSubmit((v) => mut.mutate(v))}
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-5"
         >
-          <label className="flex flex-col gap-1.5">
-            <span className="text-sm text-zinc-300">Email (read-only)</span>
+          <label className="flex flex-col gap-2">
+            <span className="st-label">Email · read-only</span>
             <input
               type="email"
               value={data?.email || ""}
               readOnly
-              className={inputCls + " cursor-not-allowed text-zinc-500"}
+              className="st-input st-input--readonly"
             />
           </label>
 
-          <label className="flex flex-col gap-1.5">
-            <span className="text-sm text-zinc-300">Display name</span>
+          <label className="flex flex-col gap-2">
+            <span className="st-label st-label--req">Display name</span>
             <input
               type="text"
               {...register("name", { required: true })}
-              className={inputCls}
+              className="st-input"
             />
             {formState.errors.name && (
-              <span className="text-xs text-red-400">Name is required.</span>
+              <span className="st-error">Name is required.</span>
             )}
           </label>
 
-          {error && (
-            <p className="rounded-md border border-red-900/50 bg-red-950/40 px-3 py-2 text-sm text-red-300">
-              {error}
-            </p>
-          )}
+          {error && <p className="st-error-banner">{error}</p>}
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <button
               type="submit"
               disabled={mut.isPending}
-              className="rounded-md bg-purple-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-purple-400 disabled:cursor-not-allowed disabled:opacity-50"
+              className="st-cta st-cta--sm disabled:cursor-not-allowed disabled:opacity-60"
             >
               {mut.isPending ? "Saving…" : "Save profile"}
             </button>
             {savedAt && !mut.isPending && (
-              <span className="text-xs text-emerald-400">Saved.</span>
+              <span className="inline-flex items-center gap-2 text-[12.5px] text-[var(--st-ink-2)]">
+                <LuCheck className="h-3.5 w-3.5 text-[var(--st-ink)]" />
+                <span className="st-italic">Saved.</span>
+              </span>
             )}
           </div>
         </form>
@@ -148,26 +170,28 @@ function PasswordSection() {
   }
 
   return (
-    <section>
-      <h2 className="mb-1 text-lg font-semibold text-white">Change password</h2>
-      <p className="mb-5 text-sm text-zinc-400">
-        After changing, you'll be signed out and asked to sign in again.
-      </p>
+    <section className="st-card p-5 sm:p-7 md:p-8">
+      <SectionHeader
+        icon={LuKey}
+        eyebrow="security"
+        title="Change password"
+        description="After changing, you'll be signed out and asked to sign in again."
+      />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm text-zinc-300">Current password</span>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <label className="flex flex-col gap-2">
+          <span className="st-label st-label--req">Current password</span>
           <PasswordInput
             autoComplete="current-password"
             {...register("currentPassword", { required: true })}
           />
           {formState.errors.currentPassword && (
-            <span className="text-xs text-red-400">Required.</span>
+            <span className="st-error">Required.</span>
           )}
         </label>
 
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm text-zinc-300">New password</span>
+        <label className="flex flex-col gap-2">
+          <span className="st-label st-label--req">New password</span>
           <PasswordInput
             autoComplete="new-password"
             {...register("newPassword", {
@@ -176,14 +200,14 @@ function PasswordSection() {
             })}
           />
           {formState.errors.newPassword && (
-            <span className="text-xs text-red-400">
+            <span className="st-error">
               {formState.errors.newPassword.message || "Required."}
             </span>
           )}
         </label>
 
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm text-zinc-300">Confirm new password</span>
+        <label className="flex flex-col gap-2">
+          <span className="st-label st-label--req">Confirm new password</span>
           <PasswordInput
             autoComplete="new-password"
             {...register("confirmPassword", {
@@ -192,41 +216,53 @@ function PasswordSection() {
             })}
           />
           {formState.errors.confirmPassword && (
-            <span className="text-xs text-red-400">
+            <span className="st-error">
               {formState.errors.confirmPassword.message || "Required."}
             </span>
           )}
         </label>
 
-        {error && (
-          <p className="rounded-md border border-red-900/50 bg-red-950/40 px-3 py-2 text-sm text-red-300">
-            {error}
-          </p>
-        )}
-
+        {error && <p className="st-error-banner">{error}</p>}
         {success && (
-          <p className="rounded-md border border-emerald-900/50 bg-emerald-950/40 px-3 py-2 text-sm text-emerald-300">
-            Password changed. Signing you out…
-          </p>
+          <p className="st-success-banner">Password changed. Signing you out…</p>
         )}
 
         <div>
           <button
             type="submit"
             disabled={mut.isPending}
-            className="rounded-md bg-purple-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-purple-400 disabled:cursor-not-allowed disabled:opacity-50"
+            className="st-cta st-cta--sm disabled:cursor-not-allowed disabled:opacity-60"
           >
             {mut.isPending ? "Updating…" : "Change password"}
           </button>
         </div>
       </form>
-
-      <div className="mt-8 rounded-md border border-white/10 bg-zinc-950 p-4 text-xs text-zinc-500">
-        <p className="mb-1 font-semibold text-zinc-300">Locked out?</p>
-        If you ever forget your password, set a new <code>ADMIN_PASSWORD</code> in{" "}
-        <code>.env.local</code> and run <code>npm run seed</code> again. The seed script
-        upserts your admin user so the new password takes effect immediately.
-      </div>
     </section>
+  );
+}
+
+function FallbackBox() {
+  return (
+    <div className="st-card--flat p-6">
+      <p className="st-mono text-[10px] uppercase tracking-[0.22em] text-[var(--st-muted)]">
+        — locked out?
+      </p>
+      <p className="mt-3 text-[13px] leading-relaxed text-[var(--st-ink-2)]">
+        If you ever forget your password, set a new{" "}
+        <code className="st-mono rounded bg-[var(--st-bg-2)] px-1.5 py-0.5 text-[12px] text-[var(--st-ink)]">
+          ADMIN_PASSWORD
+        </code>{" "}
+        in{" "}
+        <code className="st-mono rounded bg-[var(--st-bg-2)] px-1.5 py-0.5 text-[12px] text-[var(--st-ink)]">
+          .env.local
+        </code>{" "}
+        and run{" "}
+        <code className="st-mono rounded bg-[var(--st-bg-2)] px-1.5 py-0.5 text-[12px] text-[var(--st-ink)]">
+          npm run seed
+        </code>{" "}
+        again. The seed script upserts your admin user so the new password takes
+        effect immediately.
+      </p>
+    </div>
   );
 }

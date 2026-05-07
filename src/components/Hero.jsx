@@ -29,7 +29,7 @@ const Hero = ({ content }) => {
 
   return (
     <section className="relative pt-36 pb-20">
-      <div>
+      <div className="hidden dark:block">
         <Spotlight
           className="-top-40 -left-10 md:-left-32 md:-top-20 h-screen"
           fill="white"
@@ -38,13 +38,13 @@ const Hero = ({ content }) => {
         <Spotlight className="top-28 left-80 h-[80vh] w-[50vw]" fill="blue" />
       </div>
 
-      <div className="h-screen w-full bg-black bg-grid-white/[0.2] flex items-center justify-center absolute top-0 left-0">
-        <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-black-100  [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+      <div className="h-screen w-full dark:bg-black dark:bg-grid-white/[0.2] flex items-center justify-center absolute top-0 left-0 -z-10">
+        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black-100 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       </div>
 
       <div className="flex justify-center relative my-20 z-10">
         <div className="max-w-[89vw] md:max-w-2xl lg:max-w-[60vw] flex flex-col items-center justify-center">
-          <h2 className="uppercase tracking-widest text-xs text-center text-blue-100 max-w-80">
+          <h2 className="uppercase tracking-widest text-xs text-center text-blue-700 dark:text-blue-100 max-w-80">
             {tagline}
           </h2>
           <TextGenerateEffect
@@ -53,7 +53,7 @@ const Hero = ({ content }) => {
             duration={1.5}
             filter={false}
           />
-          <p className="text-center md:tracking-wider mb-4 text-sm md:text-lg lg:text-2xl text-gray-300">
+          <p className="text-center md:tracking-wider mb-4 text-sm md:text-lg lg:text-2xl text-zinc-600 dark:text-gray-300">
             {subheadline}
           </p>
           <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center">
@@ -66,7 +66,7 @@ const Hero = ({ content }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 download
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-white/15 bg-zinc-950/60 px-7 text-sm font-medium text-white backdrop-blur-md transition hover:border-purple-400 hover:bg-zinc-900 md:w-60 md:mt-10"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border px-7 text-sm font-medium backdrop-blur-md transition border-zinc-300 bg-white/70 text-zinc-900 hover:border-purple-400 hover:bg-zinc-50 dark:border-white/15 dark:bg-zinc-950/60 dark:text-white dark:hover:bg-zinc-900 md:w-60 md:mt-10"
               >
                 <LuDownload className="h-4 w-4" />
                 {resumeButtonText}

@@ -84,6 +84,7 @@ export default function EntityListPage({
   return (
     <>
       <PageHeader
+        eyebrow={resource}
         title={title}
         description={description}
         action={
@@ -93,7 +94,7 @@ export default function EntityListPage({
                 setError("");
                 setCreating(true);
               }}
-              className="inline-flex items-center gap-2 rounded-md bg-purple-500 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-purple-400"
+              className="st-cta st-cta--sm"
             >
               <LuPlus className="h-4 w-4" /> Add new
             </button>
@@ -104,31 +105,51 @@ export default function EntityListPage({
       {isLoading ? (
         <ListSkeleton rows={3} />
       ) : isError ? (
-        <p className="rounded-md border border-red-900/50 bg-red-950/40 px-3 py-2 text-sm text-red-300">
-          {fetchError.message}
-        </p>
+        <p className="st-error-banner">{fetchError.message}</p>
       ) : items.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-white/10 bg-zinc-950 px-4 py-8 text-center text-sm text-zinc-500">
-          No items yet. {allowAdd && "Click “Add new” to create one."}
-        </p>
+        <div className="st-card--dashed flex flex-col items-center gap-3 px-6 py-12 text-center">
+          <span className="st-eyebrow">— empty</span>
+          <p className="st-italic max-w-sm text-[20px] leading-snug text-[var(--st-ink)]">
+            Nothing here yet.
+          </p>
+          {allowAdd && (
+            <p className="text-[13px] text-[var(--st-muted)]">
+              Tap{" "}
+              <span className="st-mono rounded-full border border-[var(--st-line-2)] bg-[var(--st-bg)] px-2 py-0.5 text-[10px] uppercase tracking-[0.18em] text-[var(--st-ink)]">
+                Add new
+              </span>{" "}
+              to create the first one.
+            </p>
+          )}
+        </div>
       ) : (
         <SortableList
           items={items}
           getId={(item) => item._id}
           onReorder={(next) => reorderMut.mutate(next.map((i) => i._id))}
-          renderItem={(item, handleProps) => (
-            <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-zinc-950 p-3">
+          renderItem={(item, handleProps, index) => (
+            <div className="group st-card--flat flex items-center gap-2 px-2.5 py-2.5 transition-shadow hover:shadow-[0_18px_36px_-26px_rgba(15,27,34,0.22)] sm:gap-3 sm:px-3 sm:py-3">
               <button {...handleProps} />
+              <span className="st-mono hidden w-9 shrink-0 text-center text-[10px] uppercase tracking-[0.16em] text-[var(--st-muted-2)] md:block">
+                {String(index + 1).padStart(2, "0")}
+              </span>
               <div className="min-w-0 flex-1">{renderSummary(item)}</div>
-              <div className="flex shrink-0 items-center gap-1">
+              <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
                 <button
                   type="button"
                   onClick={() => handleVisibilityToggle(item)}
-                  className="rounded-md p-2 text-zinc-400 transition hover:bg-white/5 hover:text-white"
+                  className={
+                    "st-icon-btn " +
+                    (item.visible ? "st-icon-btn--accent" : "")
+                  }
                   aria-label={item.visible ? "Hide" : "Show"}
-                  title={item.visible ? "Visible" : "Hidden"}
+                  title={item.visible ? "Visible — click to hide" : "Hidden — click to show"}
                 >
-                  {item.visible ? <LuEye className="h-4 w-4" /> : <LuEyeOff className="h-4 w-4 text-zinc-600" />}
+                  {item.visible ? (
+                    <LuEye className="h-4 w-4" />
+                  ) : (
+                    <LuEyeOff className="h-4 w-4" />
+                  )}
                 </button>
                 <button
                   type="button"
@@ -136,7 +157,7 @@ export default function EntityListPage({
                     setError("");
                     setEditing(item);
                   }}
-                  className="rounded-md p-2 text-zinc-400 transition hover:bg-white/5 hover:text-white"
+                  className="st-icon-btn"
                   aria-label="Edit"
                 >
                   <LuPencil className="h-4 w-4" />
@@ -145,7 +166,7 @@ export default function EntityListPage({
                   <button
                     type="button"
                     onClick={() => handleDelete(item)}
-                    className="rounded-md p-2 text-zinc-400 transition hover:bg-white/5 hover:text-red-400"
+                    className="st-icon-btn st-icon-btn--danger"
                     aria-label="Delete"
                   >
                     <LuTrash2 className="h-4 w-4" />

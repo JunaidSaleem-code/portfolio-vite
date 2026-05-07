@@ -36,7 +36,7 @@ const DEFAULTS = {
 export default function HeroSettings() {
   return (
     <div className="max-w-2xl">
-      <p className="mb-6 text-sm text-zinc-400">
+      <p className="mb-6 max-w-xl text-[13.5px] leading-relaxed text-[var(--st-ink-2)]">
         Text shown in the hero (top) section of your homepage.
       </p>
       <SettingForm settingKey="hero" fields={FIELDS} defaultValues={DEFAULTS} />

@@ -51,7 +51,7 @@ export function Button({
 
       <div
         className={cn(
-          "relative bg-slate-900/[0.8] border border-slate-800 backdrop-blur-xl text-white flex items-center justify-center w-full h-full text-sm antialiased",
+          "relative bg-gradient-to-br from-white via-zinc-50 to-zinc-100/70 dark:from-slate-900/[0.85] dark:via-slate-900/[0.85] dark:to-slate-900/[0.85] border border-zinc-200/80 dark:border-slate-800 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none backdrop-blur-xl text-zinc-900 dark:text-white flex items-center justify-center w-full h-full text-sm antialiased",
           className
         )}
         style={{

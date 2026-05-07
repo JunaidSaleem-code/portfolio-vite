@@ -88,17 +88,24 @@ export default function BentoPage() {
       fields={FIELDS}
       defaultValues={DEFAULT_VALUES}
       renderSummary={(item) => (
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="flex min-w-0 items-center gap-3">
           {item.image ? (
-            <img src={item.image} alt="" className="h-12 w-12 shrink-0 rounded object-cover" />
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={item.image}
+              alt=""
+              className="h-12 w-12 shrink-0 rounded-lg border border-[var(--st-line)] object-cover"
+            />
           ) : (
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-zinc-900 text-xs text-zinc-500">
-              —
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[var(--st-line)] bg-[var(--st-bg)] text-[var(--st-muted)]">
+              <span className="st-italic text-base">—</span>
             </div>
           )}
           <div className="min-w-0">
-            <p className="truncate font-medium text-white">{item.title || "(untitled)"}</p>
-            <p className="text-xs text-zinc-500">
+            <p className="truncate text-[14.5px] font-medium text-[var(--st-ink)]">
+              {item.title || "(untitled)"}
+            </p>
+            <p className="st-mono truncate text-[10.5px] uppercase tracking-[0.18em] text-[var(--st-muted)]">
               {CARD_TYPE_OPTIONS.find((o) => o.value === item.cardType)?.label || item.cardType}
             </p>
           </div>
