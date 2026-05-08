@@ -18,7 +18,9 @@ const StudioNav = () => {
   return (
     <>
       <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-5 pt-4 md:px-8 md:pt-6">
-        <div className="pointer-events-auto mx-auto flex max-w-6xl items-center justify-between rounded-full border border-transparent bg-transparent px-4 py-2 md:px-5 md:py-2.5">
+        <div
+          className="pointer-events-auto mx-auto flex max-w-6xl items-center justify-between rounded-full border border-[var(--st-line-2)] bg-[var(--st-paper)] px-4 py-2 shadow-[0_18px_40px_-22px_rgba(15,27,34,0.35),inset_0_1px_0_0_rgba(255,255,255,0.6)] backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-[var(--st-paper)]/72 md:px-5 md:py-2.5"
+        >
           <a
             href="/"
             onClick={(e) => {

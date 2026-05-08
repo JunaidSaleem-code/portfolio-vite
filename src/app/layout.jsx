@@ -51,6 +51,16 @@ export const metadata = {
   icons: { icon: "/favicon.ico" },
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F4EFDE" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F1B22" },
+  ],
+};
+
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",

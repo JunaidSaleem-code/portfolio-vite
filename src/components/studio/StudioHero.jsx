@@ -98,22 +98,22 @@ const StudioHero = ({ content }) => {
           />
 
           {/* Announcement header */}
-          <div className="mb-6 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-3">
-                <span className="st-mono inline-flex items-center gap-2 rounded-full border border-[var(--st-ink)] bg-[var(--st-ink)] px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[var(--st-accent)]">
+          <div className="mb-5 flex flex-col gap-4 sm:mb-6 sm:gap-5 md:flex-row md:items-end md:justify-between">
+            <div className="flex flex-col gap-2.5 sm:gap-3">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <span className="st-mono inline-flex items-center gap-2 rounded-full border border-[var(--st-ink)] bg-[var(--st-ink)] px-2.5 py-1 text-[9.5px] uppercase tracking-[0.26em] text-[var(--st-accent)] sm:px-3 sm:text-[10px] sm:tracking-[0.28em]">
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="absolute inset-0 animate-ping rounded-full bg-[var(--st-accent)] opacity-70" />
                     <span className="relative h-1.5 w-1.5 rounded-full bg-[var(--st-accent)]" />
                   </span>
                   New · Interactive
                 </span>
-                <span className="st-mono text-[10px] uppercase tracking-[0.22em] text-[var(--st-muted)]">
+                <span className="st-mono text-[9.5px] uppercase tracking-[0.2em] text-[var(--st-muted)] sm:text-[10px] sm:tracking-[0.22em]">
                   Live RAG · grounded in my dossier
                 </span>
               </div>
 
-              <h3 className="st-display text-[clamp(1.75rem,3.6vw,2.75rem)] leading-[0.95] text-[var(--st-ink)]">
+              <h3 className="st-display text-[clamp(1.5rem,6vw,2.75rem)] leading-[0.95] text-[var(--st-ink)]">
                 Ask me{" "}
                 <span className="relative inline-block">
                   <span className="st-italic relative z-10 font-normal">anything</span>
@@ -124,7 +124,7 @@ const StudioHero = ({ content }) => {
                 </span>
                 <span className="text-[var(--st-muted-2)]">.</span>
               </h3>
-              <p className="max-w-md text-[14.5px] leading-relaxed text-[var(--st-ink-2)]">
+              <p className="max-w-md text-[13.5px] leading-relaxed text-[var(--st-ink-2)] sm:text-[14.5px]">
                 A real RAG pipeline reading from my own projects, experience, and
                 recognition — answers stream in, citations link straight to the work.
               </p>

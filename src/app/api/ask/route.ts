@@ -87,24 +87,47 @@ export async function POST(req: Request) {
     const { sources, contextBlock } = await retrieve(question, TOP_K);
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
-      systemInstruction: buildSystemPrompt(contextBlock),
-      generationConfig: {
-        temperature: 0.7,
-        topP: 0.95,
-        maxOutputTokens: 600,
-      },
-    });
+    const primary = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+    const fallback = process.env.GEMINI_FALLBACK_MODEL || "gemini-2.5-flash-lite";
 
-    const chat = model.startChat({
-      history: history.map((m) => ({
-        role: m.role,
-        parts: [{ text: m.content }],
-      })),
-    });
+    async function startStream(modelId: string) {
+      const m = genAI.getGenerativeModel({
+        model: modelId,
+        systemInstruction: buildSystemPrompt(contextBlock),
+        generationConfig: {
+          temperature: 0.7,
+          topP: 0.95,
+          maxOutputTokens: 600,
+        },
+      });
+      const chat = m.startChat({
+        history: history.map((msg) => ({
+          role: msg.role,
+          parts: [{ text: msg.content }],
+        })),
+      });
+      return chat.sendMessageStream(question);
+    }
 
-    const stream = await chat.sendMessageStream(question);
+    let stream;
+    try {
+      stream = await startStream(primary);
+    } catch (err: any) {
+      const overloaded =
+        /\[503\b/.test(err?.message || "") ||
+        /high demand/i.test(err?.message || "") ||
+        /\[429\b/.test(err?.message || "");
+      if (overloaded && fallback && fallback !== primary) {
+        await logError(err, {
+          path: "/api/ask",
+          phase: "primary-failed",
+          meta: { primary, fallback },
+        });
+        stream = await startStream(fallback);
+      } else {
+        throw err;
+      }
+    }
 
     const encoder = new TextEncoder();
     const readable = new ReadableStream({

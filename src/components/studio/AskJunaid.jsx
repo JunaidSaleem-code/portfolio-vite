@@ -178,9 +178,9 @@ const AskJunaid = ({ className = "" }) => {
       }
     >
       {/* Header band */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--st-ink)] bg-[var(--st-bg-2)] px-4 py-2.5 md:px-5">
-        <div className="flex items-center gap-3">
-          <span className="relative flex h-2.5 w-2.5">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b border-[var(--st-ink)] bg-[var(--st-bg-2)] px-3 py-2.5 sm:px-4 md:px-5">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <span className="relative flex h-2.5 w-2.5 shrink-0">
             <motion.span
               aria-hidden
               className="absolute inset-0 rounded-full bg-[var(--st-accent)]"
@@ -193,25 +193,25 @@ const AskJunaid = ({ className = "" }) => {
             />
             <span className="relative h-2.5 w-2.5 rounded-full bg-[var(--st-accent)]" />
           </span>
-          <span className="st-mono text-[9.5px] uppercase tracking-[0.3em] text-[var(--st-ink)]">
+          <span className="st-mono truncate text-[9px] uppercase tracking-[0.28em] text-[var(--st-ink)] sm:text-[9.5px] sm:tracking-[0.3em]">
             Live transcript
           </span>
-          <span className="hidden h-px w-8 bg-[var(--st-line-2)] sm:inline-block" />
-          <span className="st-mono hidden text-[9.5px] uppercase tracking-[0.3em] text-[var(--st-muted)] sm:inline">
+          <span className="hidden h-px w-8 bg-[var(--st-line-2)] md:inline-block" />
+          <span className="st-mono hidden truncate text-[9.5px] uppercase tracking-[0.3em] text-[var(--st-muted)] md:inline">
             Powered by RAG over my own dossier
           </span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <StatusLabel status={status} />
           {hasConversation && (
             <button
               type="button"
               onClick={reset}
-              className="st-mono inline-flex items-center gap-1.5 rounded-full border border-[var(--st-line-2)] bg-[var(--st-paper)] px-2.5 py-1 text-[9.5px] uppercase tracking-[0.25em] text-[var(--st-ink-2)] transition hover:border-[var(--st-ink)] hover:text-[var(--st-ink)]"
+              className="st-mono inline-flex items-center gap-1.5 rounded-full border border-[var(--st-line-2)] bg-[var(--st-paper)] px-2 py-1 text-[9px] uppercase tracking-[0.22em] text-[var(--st-ink-2)] transition hover:border-[var(--st-ink)] hover:text-[var(--st-ink)] sm:px-2.5 sm:text-[9.5px] sm:tracking-[0.25em]"
               aria-label="Reset conversation"
             >
               <LuTrash2 className="h-3 w-3" />
-              Reset
+              <span className="hidden sm:inline">Reset</span>
             </button>
           )}
         </div>
@@ -222,7 +222,7 @@ const AskJunaid = ({ className = "" }) => {
         {/* Transcript / Empty state */}
         <div
           ref={transcriptRef}
-          className="relative max-h-[440px] min-h-[220px] overflow-y-auto px-5 py-6 md:px-8 md:py-8"
+          className="relative max-h-[60vh] min-h-[200px] overflow-y-auto px-4 py-5 sm:max-h-[440px] sm:px-5 sm:py-6 md:px-8 md:py-8"
         >
           {!hasConversation ? (
             <EmptyState onPick={ask} reduced={reduced} />
@@ -254,7 +254,7 @@ const AskJunaid = ({ className = "" }) => {
           className="border-t border-[var(--st-line-2)] bg-[var(--st-paper)]"
         >
           <div className="flex items-stretch gap-0">
-            <span className="st-mono flex shrink-0 items-center px-4 text-[10px] uppercase tracking-[0.3em] text-[var(--st-muted)] md:px-5">
+            <span className="st-mono hidden shrink-0 items-center px-3 text-[10px] uppercase tracking-[0.3em] text-[var(--st-muted)] sm:flex sm:px-4 md:px-5">
               You
             </span>
             <input
@@ -265,28 +265,30 @@ const AskJunaid = ({ className = "" }) => {
               placeholder={
                 hasConversation
                   ? "Follow-up?"
-                  : "Ask me anything — projects, stack, availability…"
+                  : "Ask anything — projects, stack, availability…"
               }
               maxLength={800}
               disabled={busy}
-              className="st-italic w-full bg-transparent py-4 text-[16px] text-[var(--st-ink)] placeholder:text-[var(--st-muted)]/70 focus:outline-none disabled:opacity-60 md:text-[17px]"
+              className="st-italic w-full min-w-0 bg-transparent px-4 py-3.5 text-[15px] text-[var(--st-ink)] placeholder:text-[var(--st-muted)]/70 focus:outline-none disabled:opacity-60 sm:px-0 sm:py-4 sm:text-[16px] md:text-[17px]"
               aria-label="Your question for Junaid"
             />
             <button
               type="submit"
               disabled={busy || !input.trim()}
-              className="group flex shrink-0 items-center gap-2 border-l border-[var(--st-line-2)] bg-[var(--st-ink)] px-4 text-[var(--st-paper)] transition disabled:opacity-50 enabled:hover:bg-[var(--st-accent)] enabled:hover:text-[var(--st-ink)] md:px-5"
+              className="group flex shrink-0 items-center justify-center gap-2 border-l border-[var(--st-line-2)] bg-[var(--st-ink)] px-3.5 text-[var(--st-paper)] transition disabled:opacity-50 enabled:hover:bg-[var(--st-accent)] enabled:hover:text-[var(--st-ink)] sm:px-4 md:px-5"
               aria-label="Send"
             >
-              <span className="st-mono text-[10px] uppercase tracking-[0.28em]">Send</span>
+              <span className="st-mono hidden text-[10px] uppercase tracking-[0.28em] sm:inline">
+                Send
+              </span>
               <LuArrowUp className="h-4 w-4 transition-transform group-enabled:group-hover:-translate-y-0.5" />
             </button>
           </div>
 
           {/* Quick suggestions */}
           {hasConversation && status === "idle" && (
-            <div className="flex flex-wrap items-center gap-2 border-t border-[var(--st-line-2)] px-5 py-3 md:px-8">
-              <span className="st-mono text-[9.5px] uppercase tracking-[0.28em] text-[var(--st-muted)]">
+            <div className="flex flex-wrap items-center gap-1.5 border-t border-[var(--st-line-2)] px-4 py-2.5 sm:gap-2 sm:px-5 sm:py-3 md:px-8">
+              <span className="st-mono text-[9px] uppercase tracking-[0.26em] text-[var(--st-muted)] sm:text-[9.5px] sm:tracking-[0.28em]">
                 Try
               </span>
               {pickSuggestions(messages, 3).map((q) => (
@@ -294,7 +296,7 @@ const AskJunaid = ({ className = "" }) => {
                   key={q}
                   type="button"
                   onClick={() => ask(q)}
-                  className="st-mono rounded-full border border-[var(--st-line-2)] bg-[var(--st-bg)] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[var(--st-ink-2)] transition hover:border-[var(--st-ink)] hover:bg-[var(--st-ink)] hover:text-[var(--st-accent)]"
+                  className="st-mono rounded-full border border-[var(--st-line-2)] bg-[var(--st-bg)] px-2.5 py-1 text-[9.5px] uppercase tracking-[0.18em] text-[var(--st-ink-2)] transition hover:border-[var(--st-ink)] hover:bg-[var(--st-ink)] hover:text-[var(--st-accent)] sm:px-3 sm:text-[10px] sm:tracking-[0.2em]"
                 >
                   {q}
                 </button>
@@ -303,7 +305,7 @@ const AskJunaid = ({ className = "" }) => {
           )}
 
           {error && status === "error" && (
-            <p className="st-mono border-t border-[var(--st-line-2)] bg-[var(--st-bg-2)] px-5 py-2 text-[10.5px] uppercase tracking-[0.22em] text-[var(--st-ink-2)] md:px-8">
+            <p className="st-mono border-t border-[var(--st-line-2)] bg-[var(--st-bg-2)] px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[var(--st-ink-2)] sm:px-5 sm:text-[10.5px] sm:tracking-[0.22em] md:px-8">
               {error}
             </p>
           )}
@@ -398,7 +400,7 @@ const UserBubble = ({ text, reduced }) => (
     <span className="st-mono text-[9.5px] uppercase tracking-[0.28em] text-[var(--st-muted)]">
       You
     </span>
-    <p className="max-w-[85%] rounded-[2px] border border-[var(--st-ink)] bg-[var(--st-ink)] px-4 py-2.5 text-[14.5px] leading-relaxed text-[var(--st-paper)]">
+    <p className="max-w-[92%] break-words rounded-[2px] border border-[var(--st-ink)] bg-[var(--st-ink)] px-3.5 py-2.5 text-[14px] leading-relaxed text-[var(--st-paper)] sm:max-w-[85%] sm:px-4 sm:text-[14.5px]">
       {text}
     </p>
   </motion.li>
@@ -421,7 +423,7 @@ const JunaidBubble = ({ text, streaming, error, sources, reduced }) => (
     )}
     <div
       className={
-        "max-w-[88%] rounded-[2px] border bg-[var(--st-bg)] px-4 py-3 text-[15px] leading-relaxed text-[var(--st-ink)] " +
+        "max-w-full break-words rounded-[2px] border bg-[var(--st-bg)] px-3.5 py-3 text-[14.5px] leading-relaxed text-[var(--st-ink)] sm:max-w-[88%] sm:px-4 sm:text-[15px] " +
         (error ? "border-[var(--st-ink)]/40 italic" : "border-[var(--st-line-2)]")
       }
     >
@@ -443,7 +445,7 @@ const KIND_LABEL = {
 
 const SourceChips = ({ sources }) => (
   <div className="flex flex-wrap items-center gap-1.5">
-    <span className="st-mono text-[9px] uppercase tracking-[0.28em] text-[var(--st-muted)]">
+    <span className="st-mono text-[9px] uppercase tracking-[0.26em] text-[var(--st-muted)] sm:tracking-[0.28em]">
       Retrieved · top {sources.length}
     </span>
     {sources.map((s) => {
@@ -451,18 +453,18 @@ const SourceChips = ({ sources }) => (
       const score = typeof s.score === "number" ? s.score.toFixed(2) : "";
       const inner = (
         <>
-          <span className="st-mono text-[9px] uppercase tracking-[0.18em]">
+          <span className="st-mono max-w-[55vw] truncate text-[9px] uppercase tracking-[0.16em] sm:max-w-[16rem] sm:tracking-[0.18em]">
             {label}
           </span>
           {score && (
-            <span className="st-mono text-[8.5px] tracking-[0.18em] text-[var(--st-muted)]">
+            <span className="st-mono shrink-0 text-[8.5px] tracking-[0.18em] text-[var(--st-muted)]">
               {score}
             </span>
           )}
         </>
       );
       const className =
-        "inline-flex items-center gap-1.5 rounded-full border border-[var(--st-line-2)] bg-[var(--st-paper)] px-2 py-0.5 text-[var(--st-ink-2)] transition hover:border-[var(--st-ink)] hover:bg-[var(--st-ink)] hover:text-[var(--st-accent)]";
+        "inline-flex max-w-full items-center gap-1.5 rounded-full border border-[var(--st-line-2)] bg-[var(--st-paper)] px-2 py-0.5 text-[var(--st-ink-2)] transition hover:border-[var(--st-ink)] hover:bg-[var(--st-ink)] hover:text-[var(--st-accent)]";
       return s.url && s.url.startsWith("/") ? (
         <Link key={s.chunkId} href={s.url} className={className}>
           {inner}
