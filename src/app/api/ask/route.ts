@@ -78,7 +78,7 @@ export async function POST(req: Request) {
         await rebuildIndex();
         stats = await indexStats();
       } catch (err) {
-        await logError(err as Error, { path: "/api/ask", phase: "lazy-index" });
+        await logError(err as Error, { path: "/api/ask", meta: { phase: "lazy-index" } });
         usedFallback = true;
       }
     }
@@ -120,8 +120,7 @@ export async function POST(req: Request) {
       if (overloaded && fallback && fallback !== primary) {
         await logError(err, {
           path: "/api/ask",
-          phase: "primary-failed",
-          meta: { primary, fallback },
+          meta: { phase: "primary-failed", primary, fallback },
         });
         stream = await startStream(fallback);
       } else {
@@ -148,7 +147,7 @@ export async function POST(req: Request) {
           }
           controller.close();
         } catch (err) {
-          await logError(err as Error, { path: "/api/ask", phase: "stream" });
+          await logError(err as Error, { path: "/api/ask", meta: { phase: "stream" } });
           controller.error(err);
         }
       },
