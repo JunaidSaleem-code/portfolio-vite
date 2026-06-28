@@ -54,7 +54,7 @@ export default async function ProjectDetailPage({ params }) {
   const gallery = Array.isArray(project.gallery) ? project.gallery.filter(Boolean) : [];
 
   return (
-    <StudioShell>
+    <StudioShell hideStroke>
       <StudioNav />
 
       <script

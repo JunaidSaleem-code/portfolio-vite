@@ -1,44 +1,32 @@
-import { getHomePageData } from "@/lib/data";
+import { Suspense } from "react";
 import StudioShell from "@/components/studio/StudioShell";
 import StudioNav from "@/components/studio/StudioNav";
 import StudioHero from "@/components/studio/StudioHero";
-import StudioBento from "@/components/studio/StudioBento";
-import StudioWork from "@/components/studio/StudioWork";
-import StudioExperience from "@/components/studio/StudioExperience";
-import StudioApproach from "@/components/studio/StudioApproach";
-import StudioCredentials from "@/components/studio/StudioCredentials";
-import StudioTestimonials from "@/components/studio/StudioTestimonials";
-import StudioFooter from "@/components/studio/StudioFooter";
+import StudioPageBody from "@/components/studio/StudioPageBody";
+import StudioPageBodySkeleton from "@/components/studio/StudioPageBodySkeleton";
 
 export const dynamic = "force-dynamic";
 
-export default async function Home() {
-  const {
-    bentoItems,
-    projects,
-    experiences,
-    achievements,
-    testimonials,
-    approachPhases,
-    navItems,
-    socialLinks,
-    settings,
-  } = await getHomePageData();
-
+/**
+ * The shell, nav, and hero render synchronously so first paint is
+ * instantaneous — the user can read and interact with AskJunaid while
+ * the rest of the page streams in. Data-driven sections live behind
+ * <Suspense> and stream once MongoDB resolves; on cold start that
+ * window is filled by the editorial blueprint skeleton instead of a
+ * blank screen.
+ *
+ * Hero customization from /admin/settings/hero is intentionally not
+ * awaited here — the defaults are the canonical brand copy and
+ * blocking on a Setting fetch would re-introduce the cold-start stall.
+ */
+export default function Home() {
   return (
     <StudioShell>
-      <StudioNav navItems={navItems} />
-      <StudioHero content={settings?.hero} />
-      <StudioBento items={bentoItems} />
-      <StudioWork items={projects} />
-      <StudioExperience items={experiences} />
-      <StudioApproach phases={approachPhases} />
-      <StudioCredentials items={achievements} />
-      <StudioTestimonials items={testimonials} />
-      <StudioFooter
-        content={settings?.footer}
-        socialLinks={socialLinks}
-      />
+      <StudioNav />
+      <StudioHero />
+      <Suspense fallback={<StudioPageBodySkeleton />}>
+        <StudioPageBody />
+      </Suspense>
     </StudioShell>
   );
 }

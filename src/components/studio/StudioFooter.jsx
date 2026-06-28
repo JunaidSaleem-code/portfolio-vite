@@ -10,7 +10,7 @@ const DEFAULTS = {
   paragraph:
     "Taking on selected freelance and full-time work. AI integrations, Next.js product builds, deep-dive consulting — drop a line.",
   contactEmail: "chmjunaidsaleem@gmail.com",
-  copyright: "© 2026 — handcrafted in Lahore",
+  copyright: `© ${new Date().getFullYear()} — handcrafted in Lahore`,
 };
 
 const StudioFooter = ({ content, socialLinks = [] }) => {
@@ -18,9 +18,9 @@ const StudioFooter = ({ content, socialLinks = [] }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <footer id="contact" className="relative px-6 pt-16 md:pt-20">
+    <footer id="contact" className="relative px-6 pt-16 pb-6 md:pt-20 md:pb-8">
       <div className="mx-auto max-w-6xl">
-        <SectionEyebrow index="⑦" path="Contact" />
+        <SectionEyebrow index="⑧" path="Contact" />
 
         <h2 className="st-display mt-5 text-[clamp(2.75rem,10vw,8.5rem)] text-[var(--st-ink)]">
           Let&apos;s build

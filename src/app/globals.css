@@ -261,6 +261,65 @@
   opacity: 0.4;
 }
 
+/* Atmospheric backdrop — class form so mobile can dial it down. */
+.st-shell-glow {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  will-change: opacity;
+}
+.st-shell-glow--warm {
+  left: -20%;
+  top: -10%;
+  height: 60vh;
+  width: 60vh;
+  opacity: 0.55;
+  background: radial-gradient(circle, rgba(255, 220, 150, 0.5), transparent 70%);
+  filter: blur(40px);
+}
+.st-shell-glow--cool {
+  right: -10%;
+  bottom: -15%;
+  height: 70vh;
+  width: 70vh;
+  opacity: 0.45;
+  background: radial-gradient(circle, rgba(194, 248, 79, 0.35), transparent 65%);
+  filter: blur(60px);
+}
+.st-shell-dotgrid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(15, 27, 34, 0.08) 1px, transparent 0);
+  background-size: 26px 26px;
+}
+
+/* Mobile compositing pass — heavy blur filters and grain blend modes
+   are the biggest GPU cost on mid-range Android. We trade visual
+   richness for smoother scroll and lower battery draw under 768px. */
+@media (max-width: 767px) {
+  .st-shell-glow--warm {
+    height: 50vh;
+    width: 50vh;
+    filter: blur(24px);
+    opacity: 0.4;
+  }
+  .st-shell-glow--cool {
+    height: 55vh;
+    width: 55vh;
+    filter: blur(32px);
+    opacity: 0.35;
+  }
+  .st-shell-dotgrid {
+    background-size: 22px 22px;
+    opacity: 0.35;
+  }
+  .st-shell-grain {
+    display: none;
+  }
+}
+
 /* Marquee for ticker */
 @keyframes st-marquee-x {
   from { transform: translateX(0); }
@@ -270,6 +329,127 @@
   display: flex;
   width: max-content;
   animation: st-marquee-x 38s linear infinite;
+}
+
+/* AskJunaid composer — focus-within glow so the user sees the
+   composer light up when they tap in. The lime ring matches the
+   live-transcript dot and accent throughout the studio. */
+.st-aj-form {
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.st-aj-form:focus-within {
+  box-shadow: inset 0 1px 0 0 var(--st-accent);
+}
+
+/* =========================================================
+   STUDIO BLUEPRINT — Suspense-fallback editorial skeleton
+   ========================================================= */
+.st-bp {
+  color: var(--st-ink);
+}
+
+/* Lime progress rule */
+.st-bp-rule {
+  width: 35%;
+  animation: st-bp-rule 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  box-shadow: 0 0 16px var(--st-accent-glow);
+  will-change: transform, width;
+}
+@keyframes st-bp-rule {
+  0%   { transform: translateX(-110%); width: 35%; }
+  50%  { transform: translateX(40%);   width: 55%; }
+  100% { transform: translateX(220%);  width: 35%; }
+}
+
+/* Section counter ticking 03 → 05 → 07 → 09 */
+.st-bp-counter::before {
+  content: "03";
+  display: inline-block;
+  min-width: 1.5ch;
+  animation: st-bp-counter 4s steps(1, end) infinite;
+  font-variant-numeric: tabular-nums;
+}
+@keyframes st-bp-counter {
+  0%, 24%   { content: "03"; }
+  25%, 49%  { content: "05"; }
+  50%, 74%  { content: "07"; }
+  75%, 100% { content: "09"; }
+}
+
+/* Wireframe section frame */
+.st-bp-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  border: 1.5px dashed var(--st-line-2);
+  background: rgba(250, 246, 232, 0.5);
+}
+
+/* Corner ticks at the four wireframe corners */
+.st-bp-tick {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-left: 1.5px solid var(--st-ink);
+  border-top: 1.5px solid var(--st-ink);
+}
+.st-bp-tick--tl { top: -1px; left: -1px; }
+.st-bp-tick--tr { top: -1px; right: -1px; transform: rotate(90deg); }
+.st-bp-tick--br { bottom: -1px; right: -1px; transform: rotate(180deg); }
+.st-bp-tick--bl { bottom: -1px; left: -1px; transform: rotate(-90deg); }
+
+/* Diagonal hatch overlay */
+.st-bp-hatch {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image:
+    repeating-linear-gradient(135deg, var(--st-ink) 0 1px, transparent 1px 8px);
+}
+
+/* Shimmer bars — width controlled via custom props for responsive override */
+.st-bp-bar {
+  position: relative;
+  display: block;
+  height: 12px;
+  width: var(--st-bp-w, 100%);
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--st-line);
+}
+.st-bp-bar--tall { height: 36px; }
+@media (min-width: 768px) {
+  .st-bp-bar { width: var(--st-bp-w-md, var(--st-bp-w, 100%)); }
+  .st-bp-bar--tall { height: 48px; }
+}
+.st-bp-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  animation: st-bp-shimmer 1.7s ease-in-out infinite;
+  animation-delay: var(--st-bp-delay, 0ms);
+}
+@keyframes st-bp-shimmer {
+  from { background-position: -120% 0; }
+  to   { background-position: 220% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-bp-rule,
+  .st-bp-bar::after,
+  .st-bp-counter::before {
+    animation: none !important;
+  }
+  .st-bp-rule { transform: translateX(0); width: 45%; }
+  .st-bp-counter::before { content: "07"; }
 }
 
 /* =========================================================

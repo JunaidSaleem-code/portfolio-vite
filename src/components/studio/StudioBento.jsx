@@ -159,7 +159,7 @@ const StudioBento = ({ items = [] }) => {
               </span>
               <span className="hidden h-px w-6 bg-[var(--st-ink)]/40 sm:inline-block" />
               <span className="st-mono text-[9px] uppercase tracking-[0.26em] text-[var(--st-ink-2)] sm:text-[9.5px] sm:tracking-[0.3em]">
-                Nº 0001 / 26
+                Dossier · {String(DOSSIER.length).padStart(2, "0")} entries
               </span>
             </div>
 
@@ -182,7 +182,7 @@ const StudioBento = ({ items = [] }) => {
                   </span>
                   <span className="h-px w-6 bg-[var(--st-line-2)] sm:w-8" />
                   <span className="st-mono text-[9.5px] uppercase tracking-[0.3em] text-[var(--st-muted)]">
-                    Plate 01 / 26
+                    Plate 01
                   </span>
                 </div>
                 <InlineStamp />

@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { LuArrowUp, LuCircle, LuSparkles, LuTrash2 } from "react-icons/lu";
+import { LuArrowUp, LuCircle, LuSparkles, LuTrash2, LuSquare } from "react-icons/lu";
+
+// Show a "still reaching the model…" reassurance after this many ms
+// of waiting for the first byte. Cold-start LLM calls regularly cross
+// 4s on free-tier infra; without this the user thinks the page froze.
+const SLOW_HINT_MS = 4000;
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -31,17 +36,39 @@ const AskJunaid = ({ className = "" }) => {
   const [input, setInput] = useState("");
   const [status, setStatus] = useState("idle"); // idle | thinking | streaming | error
   const [error, setError] = useState("");
+  const [slow, setSlow] = useState(false);
   const transcriptRef = useRef(null);
   const inputRef = useRef(null);
   const abortRef = useRef(null);
 
   const hasConversation = messages.length > 0;
+  const busy = status === "thinking" || status === "streaming";
 
   useEffect(() => {
     if (transcriptRef.current) {
       transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
     }
   }, [messages, status]);
+
+  // Show a "still reaching the model…" hint if the request is taking
+  // longer than SLOW_HINT_MS. Reset whenever we leave the thinking/
+  // streaming state so the badge never sticks.
+  useEffect(() => {
+    if (status !== "thinking") {
+      setSlow(false);
+      return;
+    }
+    const t = window.setTimeout(() => setSlow(true), SLOW_HINT_MS);
+    return () => window.clearTimeout(t);
+  }, [status]);
+
+  // Abort any in-flight request when the component unmounts so React
+  // doesn't try to setState on a torn-down tree.
+  useEffect(() => {
+    return () => {
+      abortRef.current?.abort();
+    };
+  }, []);
 
   async function ask(question) {
     const trimmed = question.trim();
@@ -160,12 +187,18 @@ const AskJunaid = ({ className = "" }) => {
     inputRef.current?.focus();
   }
 
+  function stop() {
+    abortRef.current?.abort();
+    setStatus("idle");
+    setMessages((prev) =>
+      prev.map((m) => (m.streaming ? { ...m, streaming: false } : m))
+    );
+  }
+
   function onSubmit(e) {
     e.preventDefault();
     ask(input);
   }
-
-  const busy = status === "thinking" || status === "streaming";
 
   return (
     <motion.div
@@ -251,7 +284,7 @@ const AskJunaid = ({ className = "" }) => {
         {/* Composer */}
         <form
           onSubmit={onSubmit}
-          className="border-t border-[var(--st-line-2)] bg-[var(--st-paper)]"
+          className="st-aj-form border-t border-[var(--st-line-2)] bg-[var(--st-paper)] focus-within:bg-white"
         >
           <div className="flex items-stretch gap-0">
             <span className="st-mono hidden shrink-0 items-center px-3 text-[10px] uppercase tracking-[0.3em] text-[var(--st-muted)] sm:flex sm:px-4 md:px-5">
@@ -260,6 +293,10 @@ const AskJunaid = ({ className = "" }) => {
             <input
               ref={inputRef}
               type="text"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="sentences"
+              enterKeyHint="send"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={
@@ -269,25 +306,50 @@ const AskJunaid = ({ className = "" }) => {
               }
               maxLength={800}
               disabled={busy}
-              className="st-italic w-full min-w-0 bg-transparent px-4 py-3.5 text-[15px] text-[var(--st-ink)] placeholder:text-[var(--st-muted)]/70 focus:outline-none disabled:opacity-60 sm:px-0 sm:py-4 sm:text-[16px] md:text-[17px]"
+              /* 16px on mobile prevents iOS Safari zooming the viewport on focus. */
+              className="st-italic w-full min-w-0 bg-transparent px-4 py-3.5 text-[16px] text-[var(--st-ink)] placeholder:text-[var(--st-muted)]/70 focus:outline-none disabled:opacity-60 sm:px-0 sm:py-4 sm:text-[16px] md:text-[17px]"
               aria-label="Your question for Junaid"
             />
-            <button
-              type="submit"
-              disabled={busy || !input.trim()}
-              className="group flex shrink-0 items-center justify-center gap-2 border-l border-[var(--st-line-2)] bg-[var(--st-ink)] px-3.5 text-[var(--st-paper)] transition disabled:opacity-50 enabled:hover:bg-[var(--st-accent)] enabled:hover:text-[var(--st-ink)] sm:px-4 md:px-5"
-              aria-label="Send"
-            >
-              <span className="st-mono hidden text-[10px] uppercase tracking-[0.28em] sm:inline">
-                Send
-              </span>
-              <LuArrowUp className="h-4 w-4 transition-transform group-enabled:group-hover:-translate-y-0.5" />
-            </button>
+            {busy ? (
+              <button
+                type="button"
+                onClick={stop}
+                className="group flex shrink-0 items-center justify-center gap-2 border-l border-[var(--st-line-2)] bg-[var(--st-bg-2)] px-3.5 text-[var(--st-ink)] transition hover:bg-[var(--st-ink)] hover:text-[var(--st-paper)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--st-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--st-paper)] sm:px-4 md:px-5"
+                aria-label="Stop generating"
+              >
+                <span className="st-mono hidden text-[10px] uppercase tracking-[0.28em] sm:inline">
+                  Stop
+                </span>
+                <LuSquare className="h-3.5 w-3.5 fill-current" />
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={!input.trim()}
+                className="group flex shrink-0 items-center justify-center gap-2 border-l border-[var(--st-line-2)] bg-[var(--st-ink)] px-3.5 text-[var(--st-paper)] transition disabled:opacity-50 enabled:hover:bg-[var(--st-accent)] enabled:hover:text-[var(--st-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--st-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--st-paper)] sm:px-4 md:px-5"
+                aria-label="Send"
+              >
+                <span className="st-mono hidden text-[10px] uppercase tracking-[0.28em] sm:inline">
+                  Send
+                </span>
+                <LuArrowUp className="h-4 w-4 transition-transform group-enabled:group-hover:-translate-y-0.5" />
+              </button>
+            )}
           </div>
+
+          {slow && status === "thinking" && (
+            <p
+              role="status"
+              aria-live="polite"
+              className="st-mono border-t border-[var(--st-line-2)] bg-[var(--st-bg-2)] px-4 py-2 text-[10.5px] uppercase tracking-[0.22em] text-[var(--st-ink-2)] sm:px-5 md:px-8"
+            >
+              Still reaching the model — first calls run cold, hang on.
+            </p>
+          )}
 
           {/* Quick suggestions */}
           {hasConversation && status === "idle" && (
-            <div className="flex flex-wrap items-center gap-1.5 border-t border-[var(--st-line-2)] px-4 py-2.5 sm:gap-2 sm:px-5 sm:py-3 md:px-8">
+            <div className="flex flex-wrap items-center gap-1.5 border-t border-[var(--st-line-2)] px-4 py-3 sm:gap-2 sm:px-5 sm:py-3 md:px-8">
               <span className="st-mono text-[9px] uppercase tracking-[0.26em] text-[var(--st-muted)] sm:text-[9.5px] sm:tracking-[0.28em]">
                 Try
               </span>
@@ -296,7 +358,7 @@ const AskJunaid = ({ className = "" }) => {
                   key={q}
                   type="button"
                   onClick={() => ask(q)}
-                  className="st-mono rounded-full border border-[var(--st-line-2)] bg-[var(--st-bg)] px-2.5 py-1 text-[9.5px] uppercase tracking-[0.18em] text-[var(--st-ink-2)] transition hover:border-[var(--st-ink)] hover:bg-[var(--st-ink)] hover:text-[var(--st-accent)] sm:px-3 sm:text-[10px] sm:tracking-[0.2em]"
+                  className="st-mono min-h-[36px] rounded-full border border-[var(--st-line-2)] bg-[var(--st-bg)] px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-[var(--st-ink-2)] transition hover:border-[var(--st-ink)] hover:bg-[var(--st-ink)] hover:text-[var(--st-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--st-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--st-paper)] sm:px-3 sm:tracking-[0.2em]"
                 >
                   {q}
                 </button>
@@ -377,12 +439,12 @@ const EmptyState = ({ onPick, reduced }) => (
           initial={reduced ? false : { opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 + i * 0.05, ease: EASE }}
-          className="group inline-flex items-center gap-2 rounded-full border border-[var(--st-line-2)] bg-[var(--st-bg)] px-3.5 py-1.5 text-[var(--st-ink)] transition hover:border-[var(--st-ink)] hover:bg-[var(--st-ink)] hover:text-[var(--st-accent)]"
+          className="group inline-flex min-h-[40px] items-center gap-2 rounded-full border border-[var(--st-line-2)] bg-[var(--st-bg)] px-3.5 py-2 text-[var(--st-ink)] transition hover:border-[var(--st-ink)] hover:bg-[var(--st-ink)] hover:text-[var(--st-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--st-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--st-paper)]"
         >
           <span className="st-mono text-[10px] uppercase tracking-[0.22em]">
             {String(i + 1).padStart(2, "0")}
           </span>
-          <span className="text-[12.5px]">{q}</span>
+          <span className="text-[13px]">{q}</span>
         </motion.button>
       ))}
     </div>

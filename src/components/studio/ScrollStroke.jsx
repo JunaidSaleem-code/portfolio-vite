@@ -75,13 +75,14 @@ const ScrollStroke = () => {
   const lengthC = useTransform(scrollYProgress, [0, 1], [0.22, 1]);
 
   return (
-    <svg
-      aria-hidden
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full"
-      viewBox="0 0 1440 7320"
-      preserveAspectRatio="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <svg
+        aria-hidden
+        className="h-full w-full"
+        viewBox="0 0 1440 7320"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
       <defs>
         <linearGradient id="st-strand-a" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#C2F84F" stopOpacity="1" />
@@ -144,7 +145,8 @@ const ScrollStroke = () => {
         strokeLinejoin="round"
         style={{ pathLength: lengthC }}
       />
-    </svg>
+      </svg>
+    </div>
   );
 };
 
