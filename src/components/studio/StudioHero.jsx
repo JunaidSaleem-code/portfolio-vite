@@ -67,28 +67,18 @@ const StudioHero = ({ content: initialContent }) => {
                 {c.ctaText}
                 <LuArrowUpRight className="h-4 w-4" />
               </a>
-              {c.resumeUrl && (() => {
-                let downloadUrl = c.resumeUrl;
-                if (downloadUrl && downloadUrl.includes("res.cloudinary.com")) {
-                  if (downloadUrl.includes("/image/upload/")) {
-                    downloadUrl = downloadUrl.replace("/image/upload/", "/raw/upload/fl_attachment/");
-                  } else if (downloadUrl.includes("/upload/") && !downloadUrl.includes("fl_attachment")) {
-                    downloadUrl = downloadUrl.replace("/upload/", "/upload/fl_attachment/");
-                  }
-                }
-                return (
-                  <a
-                    href={downloadUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download
-                    className="st-cta st-cta--ghost"
-                  >
-                    <LuDownload className="h-4 w-4" />
-                    {c.resumeButtonText}
-                  </a>
-                );
-              })()}
+              {c.resumeUrl && (
+                <a
+                  href="/api/resume"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="st-cta st-cta--ghost"
+                >
+                  <LuDownload className="h-4 w-4" />
+                  {c.resumeButtonText}
+                </a>
+              )}
             </div>
           </div>
 
