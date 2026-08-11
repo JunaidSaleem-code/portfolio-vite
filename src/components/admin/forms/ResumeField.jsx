@@ -1,7 +1,31 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LuUpload, LuExternalLink, LuFileText, LuCheck, LuX } from "react-icons/lu";
+import { LuUpload, LuExternalLink, LuFileText } from "react-icons/lu";
+import { apiSignUpload } from "@/lib/api-client";
+
+async function uploadPdfToCloudinary(file) {
+  const { signature, timestamp, apiKey, cloudName } = await apiSignUpload("resumes");
+  const form = new FormData();
+  form.append("file", file);
+  form.append("api_key", apiKey);
+  form.append("timestamp", timestamp);
+  form.append("signature", signature);
+  form.append("folder", "resumes");
+
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
+    method: "POST",
+    body: form,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || "PDF upload failed");
+  }
+
+  const json = await res.json();
+  return json.secure_url;
+}
 
 export default function ResumeField({ value, onChange }) {
   const [resumes, setResumes] = useState([]);
@@ -31,7 +55,7 @@ export default function ResumeField({ value, onChange }) {
 
   async function handleFileUpload(file) {
     if (!file) return;
-    if (!file.name.toLowerCase().endsWith(".pdf")) {
+    if (!file.name.toLowerCase().endsWith(".pdf") && file.type !== "application/pdf") {
       setError("Please select a PDF file (.pdf)");
       return;
     }
@@ -39,24 +63,11 @@ export default function ResumeField({ value, onChange }) {
     setUploading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/admin/resumes", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Failed to upload resume PDF");
-      }
-
-      const json = await res.json();
+      const url = await uploadPdfToCloudinary(file);
       await fetchResumes();
-      onChange(json.url);
+      onChange(url);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Failed to upload resume PDF");
     } finally {
       setUploading(false);
     }
@@ -92,7 +103,7 @@ export default function ResumeField({ value, onChange }) {
             {uploading ? "Uploading PDF..." : "Drag & drop new Resume PDF here"}
           </span>
           <span className="st-mono text-[10.5px] uppercase tracking-[0.2em] text-[var(--st-muted)]">
-            or click below to choose a file from your device
+            or click below to choose a PDF file
           </span>
         </div>
 
@@ -129,7 +140,7 @@ export default function ResumeField({ value, onChange }) {
               </option>
             ))}
             {value && !resumes.some((r) => r.url === value) && (
-              <option value={value}>Custom URL: {value}</option>
+              <option value={value}>Selected: {value}</option>
             )}
           </select>
 
@@ -151,13 +162,13 @@ export default function ResumeField({ value, onChange }) {
       {/* Or paste custom URL */}
       <div className="flex flex-col gap-1.5">
         <label className="st-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--st-muted)]">
-          Or custom URL / link (e.g. Google Drive)
+          Or custom URL / link (e.g. Google Drive / Cloudinary)
         </label>
         <input
           type="text"
           value={value || ""}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="/resumes/my-resume.pdf or https://..."
+          placeholder="/resume.pdf or https://..."
           className="st-input text-[13px]"
         />
       </div>
