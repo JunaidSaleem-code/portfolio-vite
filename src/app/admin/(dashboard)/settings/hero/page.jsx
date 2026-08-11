@@ -10,10 +10,9 @@ const FIELDS = [
   { name: "ctaLink", label: "Primary CTA link", type: "text", placeholder: "#projects" },
   {
     name: "resumeUrl",
-    label: "Resume / CV URL",
-    type: "text",
-    placeholder: "/resume.pdf",
-    help: "Your CV is at /public/resume.pdf — leave the path as is, or paste a hosted URL. Blank = hide the button.",
+    label: "Resume / CV File",
+    type: "resume",
+    help: "Upload a PDF resume directly or select from your uploaded resumes.",
   },
   {
     name: "resumeButtonText",

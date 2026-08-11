@@ -3,9 +3,21 @@
 import ImageField from "./ImageField";
 import ListField from "./ListField";
 import MarkdownEditor from "./MarkdownEditor";
+import ResumeField from "./ResumeField";
 
 export default function Field({ field, register, control, errors, watch, setValue }) {
   const error = errors?.[field.name]?.message;
+
+  if (field.type === "resume") {
+    return (
+      <Wrapper field={field} error={error}>
+        <ResumeField
+          value={watch(field.name)}
+          onChange={(v) => setValue(field.name, v, { shouldDirty: true, shouldValidate: true })}
+        />
+      </Wrapper>
+    );
+  }
 
   if (field.type === "textarea") {
     return (
