@@ -24,7 +24,17 @@ async function uploadPdfToCloudinary(file) {
   }
 
   const json = await res.json();
-  return json.secure_url;
+  let url = json.secure_url;
+
+  if (url && url.includes("res.cloudinary.com")) {
+    if (url.includes("/image/upload/")) {
+      url = url.replace("/image/upload/", "/raw/upload/fl_attachment/");
+    } else if (url.includes("/upload/") && !url.includes("fl_attachment")) {
+      url = url.replace("/upload/", "/upload/fl_attachment/");
+    }
+  }
+
+  return url;
 }
 
 export default function ResumeField({ value, onChange }) {
