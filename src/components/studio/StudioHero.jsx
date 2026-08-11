@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { LuArrowUpRight, LuDownload } from "react-icons/lu";
 import AskJunaid from "./AskJunaid";
 
@@ -13,8 +14,21 @@ const DEFAULTS = {
     "I'm Junaid — a full-stack engineer shipping AI-powered web products end-to-end. RAG pipelines, LLM integration, and production-grade Next.js.",
 };
 
-const StudioHero = ({ content }) => {
-  const c = { ...DEFAULTS, ...(content || {}) };
+const StudioHero = ({ content: initialContent }) => {
+  const [heroContent, setHeroContent] = useState(initialContent || null);
+
+  useEffect(() => {
+    fetch("/api/settings/hero")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && typeof data === "object" && Object.keys(data).length > 0) {
+          setHeroContent(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const c = { ...DEFAULTS, ...(heroContent || initialContent || {}) };
 
   return (
     <section
